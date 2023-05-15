@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "rsarapp.com.rsarapp",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 25,
+      "versionName": "2.2.9",
+      "outputFile": "RsarApp-release.apk"
+    }
+  ],
+  "elementType": "File"
+}
