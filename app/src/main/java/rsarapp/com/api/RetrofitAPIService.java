@@ -11,6 +11,7 @@ public class RetrofitAPIService {
 
     private static final String BASE_URL = "https://rachnasagar.in/";
     private static final String BASE_URL1 = "https://api.first.org/data/v1/";
+    private static final String BASE_URL21 = "https://api.first.org/data/v1/";
 
     public static MyAPIs getApiClient() {
 
