@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "219135212402",
+    "firebase_url": "https://rachn-192407.firebaseio.com",
+    "project_id": "rachn-192407",
+    "storage_bucket": "rachn-192407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219135212402:android:2d1da4c9c05af6a5803beb",
+        "android_client_info": {
+          "package_name": "com.rachnasagar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEkMSZQ_8jWmKJV8pgNFSL7nDmO5NiQ2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219135212402:android:8f70978bc4d72aff803beb",
+        "android_client_info": {
+          "package_name": "com.rachnasagarpvtltd.dynamic_link"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219135212402-pu15aq9prci2991t1iic1dahd8uedgq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rachnasagarpvtltd.dynamic_link",
+            "certificate_hash": "ff79ff7fed8d83a70abf5660ee25a9cd190655f3"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEkMSZQ_8jWmKJV8pgNFSL7nDmO5NiQ2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219135212402:android:74ac42574c0daf43803beb",
+        "android_client_info": {
+          "package_name": "com.rachnasagarpvtltd.ebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219135212402-ke0lvkl4ug1t4vadihbcuslffvesgvnf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rachnasagarpvtltd.ebook",
+            "certificate_hash": "ff79ff7fed8d83a70abf5660ee25a9cd190655f3"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEkMSZQ_8jWmKJV8pgNFSL7nDmO5NiQ2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219135212402:android:71f57356eb061085803beb",
+        "android_client_info": {
+          "package_name": "rsarapp.com.rsarapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219135212402-ovdruu3t0apb6slrtvt461j32qju3lr3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rsarapp.com.rsarapp",
+            "certificate_hash": "ff79ff7fed8d83a70abf5660ee25a9cd190655f3"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEkMSZQ_8jWmKJV8pgNFSL7nDmO5NiQ2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
