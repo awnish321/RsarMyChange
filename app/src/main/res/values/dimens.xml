@@ -13,6 +13,10 @@
     <dimen name="_1sdp">1dp</dimen>
     <dimen name="_5sdp">5dp</dimen>
     <dimen name="_50sdp">50dp</dimen>
+    <dimen name="dimen_22sp">22sp</dimen>
+    <dimen name="dimen_40dp">40dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_18sp">18dp</dimen>
 
 
 </resources>

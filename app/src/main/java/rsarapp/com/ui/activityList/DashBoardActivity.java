@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -16,7 +17,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +47,7 @@ import rsarapp.com.rsarapp.databinding.ActivityDashBoardBinding;
 import rsarapp.com.utilities.AllStaticMethod;
 import rsarapp.com.utilities.AppConstant;
 
-public class DashBoardActivity extends AppCompatActivity {
+public class DashBoardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Context context;
     ActivityDashBoardBinding binding;
     SharedPreferences preferences;
@@ -55,6 +62,9 @@ public class DashBoardActivity extends AppCompatActivity {
     public static String PACKAGE_NAME;
     Boolean isInternetPresent = false;
     JSONArray Class_Data;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,15 @@ public class DashBoardActivity extends AppCompatActivity {
         binding = ActivityDashBoardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = DashBoardActivity.this;
+        toolbar = findViewById(R.id.dashboardToolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
         Pref_School_UI = preferences.getString("Rsar_School_UI", "");
@@ -93,10 +112,10 @@ public class DashBoardActivity extends AppCompatActivity {
         if (isInternetPresent) {
             if (userStatus.matches("True")) {
                 if (Pref_UserType.equalsIgnoreCase("Teacher")) {
-                    binding.txtTittle.setText("Class");
+                    binding.dashboardToolbar.txtHeading.setText("Class");
                     callClassUrl();
                 } else {
-                    binding.txtTittle.setText("Subject");
+                    binding.dashboardToolbar.txtHeading.setText("Subject");
                     callSubjectURl(Db_Class_Id);
                 }
             } else {
@@ -108,7 +127,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     "You don't have internet connection.", false);
         }
 
-        binding.logout.setOnClickListener(new View.OnClickListener() {
+        binding.dashboardToolbar.imgLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AllStaticMethod.logout(context);
@@ -116,6 +135,13 @@ public class DashBoardActivity extends AppCompatActivity {
                 finishAffinity();
             }
         });
+
+        if (userStatus != null) {
+            View headerLayout = navigationView.getHeaderView(0);
+            TextView headerUserName = (TextView) headerLayout.findViewById(R.id.txtUserName);
+            TextView headerUserEmail = (TextView) headerLayout.findViewById(R.id.txtUserName);
+
+        }
 
     }
 
@@ -369,6 +395,43 @@ public class DashBoardActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navProfile:
+
+                if (userStatus != null) {
+                    startActivity(new Intent(context, MyProfileActivity.class));
+                }
+                break;
+
+            case R.id.navShare:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Astro Express");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?");
+                startActivity(Intent.createChooser(shareIntent, "share via"));
+                break;
+
+            case R.id.navLogout:
+
+                if (userStatus != null) {
+
+                    AllStaticMethod.logout(context);
+                    Intent intent = new Intent(context, LoginPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
 }

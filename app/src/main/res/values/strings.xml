@@ -35,5 +35,7 @@
     <string name="menu_versions">VERSIONS</string>
     <string name="version_vuforia">Vuforia Engine v</string>
     <string name="version_android">Android API level</string>
+    <string name="navigation_drawer_open">navigation_drawer_open</string>
+    <string name="navigation_drawer_close">navigation_drawer_close</string>
 
 </resources>

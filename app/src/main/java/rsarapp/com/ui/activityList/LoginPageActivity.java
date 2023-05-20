@@ -108,7 +108,6 @@ public class LoginPageActivity extends AppCompatActivity {
     private static int NUM_PAGES = 0;
     String Pref_Bg_Code;
     ImageView refresh;
-
     Dialog otpDialog;
 
     @Override
@@ -1049,16 +1048,9 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AllStaticMethod.logout(context);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
         AllStaticMethod.logout(context);
     }
 }

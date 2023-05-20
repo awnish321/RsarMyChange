@@ -311,11 +311,25 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/share/baseline_share_24.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="color" value="02223e" />
-                            <entry key="outputName" value="logo__2_" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="share_24" />
                             <entry key="sourceFile" value="C:\Users\ani-5\Downloads\logo (2).svg" />
                           </map>
                         </option>
