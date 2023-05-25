@@ -12,6 +12,6 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/splash_screen_description"
         android:scaleType="centerCrop"
-        android:src="@drawable/vuforia_splash" />
+        android:src="@drawable/splash_screen" />
 
 </LinearLayout>

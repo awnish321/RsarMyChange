@@ -139,8 +139,6 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
 
-    private int[] myImageList = new int[]{R.drawable.img4,R.drawable.img5};
-
     // Called when the activity first starts or the user navigates back
     // to an activity.
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +148,6 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mActivityRef = new WeakReference<Activity>(this);
         startLoadingAnimation();
         imageModelArrayList = new ArrayList<>();
-        imageModelArrayList = populateList();
-
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
         Pref_School_Fb_Name= preferences.getString("Rsar_Fd_School_Name", "");
         Pref_Bg_Code = preferences.getString("Rsar_Bg_Code", "");
@@ -185,7 +181,6 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
                         finish();
                         dialogss.dismiss();
                     }
-
                 });
 
                 dialogss.show();
@@ -385,24 +380,8 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         });
     }
 
-    private ArrayList<ImageModel> populateList() {
-
-        ArrayList<ImageModel> list = new ArrayList<>();
-
-        for(int i = 0; i < 2; i++){
-            ImageModel imageModel = new ImageModel();
-            imageModel.setImage_drawable(myImageList[i]);
-            list.add(imageModel);
-        }
-
-        return list;
-    }
-
-    // We want to load specific textures from the APK, which we will later
-    // use for rendering.
     private void loadTextures()
     {
-
 
         mTextures.add(Texture.loadTextureFromApk(
                 "VideoPlayback/play.png", getAssets()));

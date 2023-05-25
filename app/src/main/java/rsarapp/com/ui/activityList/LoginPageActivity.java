@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,15 +51,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import rsarapp.com.ui.dialog.ProgressHUD;
-import rsarapp.com.modelClass.SetterGetter_Sub_Chap;
 import rsarapp.com.adapter.HelpImageAdapter;
+import rsarapp.com.modelClass.SetterGetter_Sub_Chap;
 import rsarapp.com.modelClass.request.DeviceDetailModel;
 import rsarapp.com.modelClass.response.BannerModel;
 import rsarapp.com.rsarapp.R;
 import rsarapp.com.rsarapp.WebViewAbout;
 import rsarapp.com.rsarapp.WebViewPrivacy;
 import rsarapp.com.rsarapp.databinding.ActivityLoginPageBinding;
+import rsarapp.com.ui.dialog.ProgressHUD;
 import rsarapp.com.utilities.AllStaticMethod;
 import rsarapp.com.utilities.AppConstant;
 import rsarapp.com.utilities.MySharedPreferences;
@@ -80,8 +79,8 @@ public class LoginPageActivity extends AppCompatActivity {
     ProgressHUD dialog;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    String Str_Stu_Name, Str_Mobile, Str_Email_Id, Str_Msg, Str_UserType, Str_ClassID, Str_School_UI, Str_Status, Str_School_name, Str_Fd_School_name, Str_School_Path;
-    String Str_Bg_Code, Str_Top_Bg_Code, Str_Button_Bg, Str_Act_Status, Str_UserStatus, Str_Restric_ID, Str_Sch_Name_Color, Str_Otp_value, Pre_Email_Id, Pre_Mob_No;
+    private String Str_Stu_Name, Str_Mobile, Str_Email_Id, Str_Msg, Str_UserType, Str_ClassID, Str_School_UI, Str_Status, Str_School_name, Str_Fd_School_name,Str_UserName;
+    private String Str_Bg_Code, Str_Top_Bg_Code, Str_Button_Bg, Str_Act_Status, Str_UserStatus, Str_Restric_ID, Str_Sch_Name_Color, Str_Otp_value, Pre_Email_Id, Pre_Mob_No;
     Boolean isInternetPresent = false;
     ArrayList<SetterGetter_Sub_Chap> vinsquesarrayList;
     JSONArray DropClass_Data;
@@ -94,7 +93,6 @@ public class LoginPageActivity extends AppCompatActivity {
     public static String PACKAGE_NAME;
     String sVersionName;
     int sVersionCode;
-    String sname;
     Dialog forgetDetailDialog;
     ProgressHUD progressHUD;
     TextView text11;
@@ -102,7 +100,6 @@ public class LoginPageActivity extends AppCompatActivity {
     JSONArray Banner_Data;
     private ArrayList<BannerModel.BannerDatum> bannerDatumArrayList;
     private BannerModel.BannerDatum bannerDatum;
-    Toolbar toolbar;
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
@@ -221,7 +218,6 @@ public class LoginPageActivity extends AppCompatActivity {
         isInternetPresent = AllStaticMethod.isOnline(context);
 
         if (isInternetPresent) {
-//                Toast.makeText(getApplicationContext(), "Please Enter the Details.", Toast.LENGTH_SHORT).show();
             DropDownService();
             callHelpBannerApi();
 
@@ -265,7 +261,6 @@ public class LoginPageActivity extends AppCompatActivity {
                 }
             }
         });
-
         binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,17 +300,20 @@ public class LoginPageActivity extends AppCompatActivity {
                         dialog.show();
                     } else {
                         AllStaticMethod.showAlertDialog(context, "No Internet Connection",
-                                "You don't have internet connection.", false);                    }
+                                "You don't have internet connection.", false);
+                    }
                 }
             }
 
         });
 
     }
+
     @Override
     public void onBackPressed() {
         finish();
     }
+
     private void DropDownService() {
 
         // TODO Auto-generated method stub
@@ -418,6 +416,7 @@ public class LoginPageActivity extends AppCompatActivity {
         queue.add(postRequest);
 
     }
+
     private void ActivationCodeURL() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -436,14 +435,12 @@ public class LoginPageActivity extends AppCompatActivity {
                                 Str_Status = object.getString("Status");
                                 Str_Msg = object.getString("Message");
                                 System.out.println("abbb" + "    " + Str_Status);
-                                if (Str_Status.equalsIgnoreCase("True"))
-                                {
+                                if (Str_Status.equalsIgnoreCase("True")) {
                                     Str_UserType = object.getString("User_Type");
                                     Str_ClassID = object.getString("Class_Id");
                                     Str_School_UI = object.getString("School_UI");
                                     Str_School_name = object.getString("School_Name");
                                     Str_Fd_School_name = object.getString("School_Folder_Name");
-                                    Str_School_Path = object.getString("School_Folder_Path");
                                     Str_Bg_Code = object.getString("Bg_Code");
                                     Str_Top_Bg_Code = object.getString("Top_BgCode");
                                     Str_Button_Bg = object.getString("Button_Bg_Color");
@@ -454,7 +451,7 @@ public class LoginPageActivity extends AppCompatActivity {
                                     Pre_Email_Id = object.getString("Email");
                                     Pre_Mob_No = object.getString("Mobile");
                                     Str_UserStatus = object.getString("rsar_registered_user_status");
-
+                                    Str_UserName = object.getString("rsar_registered_user_name");
 
                                     preferences = getApplicationContext().getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
                                     editor = preferences.edit();
@@ -473,20 +470,18 @@ public class LoginPageActivity extends AppCompatActivity {
                                     editor.putString("Rsar_Pref_Email", Pre_Email_Id);
                                     editor.putString("Rsar_Pref_Mobile", Pre_Mob_No);
                                     editor.putString("rsar_registered_user_status", Str_UserStatus);
-                                    // Check in Splash screen the Value True
+                                    editor.putString("rsar_registered_user_name", Str_UserName);
                                     editor.commit();
                                     editor.apply();
-                                    openOtpDialogBox();
-                                } else
-                                {
+                                    openOtpDialogBox(object.getString("OTP"));
+                                } else {
                                     final Dialog dialoga = new Dialog(context);
                                     dialoga.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialoga.setContentView(R.layout.newdialog);
+                                    dialoga.setContentView(R.layout.new_dialog);
                                     dialoga.setCancelable(true);
                                     TextView text = (TextView) dialoga.findViewById(R.id.error_msg);
                                     text.setText(Str_Msg);
                                     Button dialogButton = (Button) dialoga.findViewById(R.id.b_error_button);
-                                    // if button is clicked, close the custom dialog
                                     dialogButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -538,6 +533,7 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
+
     private void GetAndroidPermission() {
 
         if (ActivityCompat.checkSelfPermission(context, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
@@ -602,6 +598,7 @@ public class LoginPageActivity extends AppCompatActivity {
 //            proceedAfterPermission();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -646,6 +643,7 @@ public class LoginPageActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -656,6 +654,7 @@ public class LoginPageActivity extends AppCompatActivity {
             }
         }
     }
+
     private void callForgetDialog() {
         forgetDetailDialog = new Dialog(context);
         forgetDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -685,16 +684,15 @@ public class LoginPageActivity extends AppCompatActivity {
 
                     SendMsg(ettext.getText().toString().trim());
                     callProgressBar();
-
                 }
-                //dialogss.dismiss();
             }
 
         });
 
         forgetDetailDialog.show();
     }
-    private void callProgressBar(){
+
+    private void callProgressBar() {
         String message = "Please Wait....";
         progressHUD = new ProgressHUD(context, R.style.ProgressHUD);
         progressHUD.setTitle("");
@@ -712,15 +710,15 @@ public class LoginPageActivity extends AppCompatActivity {
         progressHUD.getWindow().setAttributes(lp);
         progressHUD.show();
     }
-    private void SendMsg(String userEmail ) {
+
+    private void SendMsg(String userEmail) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlmanual = AppConstant.url + "forgotDetails.php?";
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlmanual,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response)
-                    {
+                    public void onResponse(String response) {
                         if (progressHUD.isShowing()) {
                             progressHUD.dismiss();
                         }
@@ -733,8 +731,7 @@ public class LoginPageActivity extends AppCompatActivity {
                                 object = array.getJSONObject(i);
                                 Str_Status = object.get("Status").toString();
                                 Str_Msg = object.get("Message").toString();
-                                if (Str_Status.equalsIgnoreCase("True"))
-                                {
+                                if (Str_Status.equalsIgnoreCase("True")) {
                                     preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
                                     editor = preferences.edit();
                                     editor.putString("Rsar_Otp_Value", "False");
@@ -754,9 +751,7 @@ public class LoginPageActivity extends AppCompatActivity {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                             Toast.makeText(context, " Server not responding Please try again", Toast.LENGTH_LONG).show();
-
                         }
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -785,6 +780,7 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
+
     private void callHelpBannerApi() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -868,25 +864,24 @@ public class LoginPageActivity extends AppCompatActivity {
             }
         };
         queue.add(postRequest);
-
     }
-    private void openOtpDialogBox(){
 
-        if(!Str_Otp_value.isEmpty())
-        {
+    private void openOtpDialogBox(String otpValue) {
+
+        if (!otpValue.isEmpty()) {
             otpDialog = new Dialog(context);
-            otpDialog .requestWindowFeature(Window.FEATURE_NO_TITLE);
+            otpDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             otpDialog.setContentView(R.layout.otp_dialog);
             otpDialog.setCancelable(false);
 
-            LinearLayout ln_outline=(LinearLayout)otpDialog.findViewById(R.id.dia_ln_outline);
-            View view=(View) otpDialog.findViewById(R.id.dia_view);
+            LinearLayout ln_outline = (LinearLayout) otpDialog.findViewById(R.id.dia_ln_outline);
+            View view = (View) otpDialog.findViewById(R.id.dia_view);
             TextView Error_text = (TextView) otpDialog.findViewById(R.id.dia_error_title);
             ettext = (EditText) otpDialog.findViewById(R.id.dia_error_msg);
 
             Button btn_yes = (Button) otpDialog.findViewById(R.id.dia_b_yes);
             Button cancel = (Button) otpDialog.findViewById(R.id.cancels);
-            refresh=otpDialog.findViewById(R.id.refresh);
+            refresh = otpDialog.findViewById(R.id.refresh);
 
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -903,27 +898,25 @@ public class LoginPageActivity extends AppCompatActivity {
                 }
             });
             btn_yes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Str_Otp_value= ettext.getText().toString().trim();
-                    if (ettext.getText().toString().trim().isEmpty())
-                    {
-                        Toast.makeText(context, "Please Enter OTP .", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        OtpVerify();
-                        callProgressBar();
-                    }
-                }
-
-            });
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (ettext.getText().toString().trim().isEmpty()) {
+                                                   Toast.makeText(context, "Please Enter OTP .", Toast.LENGTH_LONG).show();
+                                               } else {
+                                                   OtpVerify(ettext.getText().toString().trim());
+                                                   callProgressBar();
+                                               }
+                                           }
+                                       }
+            );
             otpDialog.show();
         }
     }
+
     private void OtpRefresh() {
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String urlmanual = AppConstant.url+"otpResend.php?";
+        String urlmanual = AppConstant.url + "otpResend.php?";
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlmanual,
                 new Response.Listener<String>() {
                     @Override
@@ -932,16 +925,16 @@ public class LoginPageActivity extends AppCompatActivity {
                         Log.d("Response", response);
                         try {
                             vinsquesarrayList = new ArrayList<SetterGetter_Sub_Chap>();
-                            JSONArray array;	array = new JSONArray(response);
+                            JSONArray array;
+                            array = new JSONArray(response);
                             JSONObject object = new JSONObject();
                             for (int i = 0; i < array.length(); i++) {
                                 object = array.getJSONObject(i);
-                                Str_Status= object.get("Status").toString();
+                                Str_Status = object.get("Status").toString();
                                 Str_Msg = object.get("Message").toString();
-                                if(Str_Status.equalsIgnoreCase("True")) {
+                                if (Str_Status.equalsIgnoreCase("True")) {
                                     Toast.makeText(context, "Please check your Email and Mobile", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
+                                } else {
                                     Toast.makeText(context, Str_Msg, Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -966,7 +959,7 @@ public class LoginPageActivity extends AppCompatActivity {
             @Override
             protected HashMap<String, String> getParams() {
 
-                HashMap<String, String>  params = new HashMap<String, String>();
+                HashMap<String, String> params = new HashMap<String, String>();
                 params.put("School_UI", Str_School_UI);
                 params.put("email", Str_Email_Id);
                 params.put("mobile", Str_Mobile);
@@ -976,24 +969,24 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-    private void OtpVerify() {
+
+    private void OtpVerify(String verifyOtp) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String urlmanual = AppConstant.url+"checkOtp.php?";
+        String urlmanual = AppConstant.url + "checkOtp.php?";
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlmanual,
-                new Response.Listener<String>()
-                {
+                new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             vinsquesarrayList = new ArrayList<SetterGetter_Sub_Chap>();
-                            JSONArray array;	array = new JSONArray(response);
+                            JSONArray array;
+                            array = new JSONArray(response);
                             JSONObject object = new JSONObject();
                             for (int i = 0; i < array.length(); i++) {
                                 object = array.getJSONObject(i);
-                                Str_Status= object.get("Status").toString();
+                                Str_Status = object.get("Status").toString();
                                 Str_Msg = object.get("Message").toString();
-                                if(Str_Status.equalsIgnoreCase("True"))
-                                {
+                                if (Str_Status.equalsIgnoreCase("True")) {
                                     preferences = getApplicationContext().getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
                                     editor = preferences.edit();
                                     editor.putString("rsar_registered_user_status", "True");
@@ -1006,16 +999,12 @@ public class LoginPageActivity extends AppCompatActivity {
                                     } else {
                                         Intent intent = new Intent(context, DashBoardActivity.class);
                                         intent.putExtra("Rsar_Class_Id", Str_ClassID);
-                                        intent.putExtra("name", sname);
-                                        intent.putExtra("email", Pre_Email_Id);
-                                        intent.putExtra("mobile", Pre_Mob_No);
                                         startActivity(intent);
                                         finish();
                                     }
                                     otpDialog.dismiss();
                                     overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
-                                }
-                                else {
+                                } else {
                                     Toast.makeText(context, Str_Msg, Toast.LENGTH_LONG).show();
                                 }
                                 if (progressHUD.isShowing()) {
@@ -1027,8 +1016,7 @@ public class LoginPageActivity extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
@@ -1036,21 +1024,15 @@ public class LoginPageActivity extends AppCompatActivity {
                 }
         ) {
             @Override
-            protected HashMap<String, String> getParams()
-            {
-                HashMap<String, String>  params = new HashMap<String, String>();
+            protected HashMap<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
                 params.put("School_UI", Str_School_UI);
-                params.put("otp", Str_Otp_value);// Second one u can changePref_Restric_Id
+                params.put("otp", verifyOtp);// Second one u can changePref_Restric_Id
                 params.put("mobile", Str_Mobile);
                 params.put("email", Str_Email_Id);
                 return params;
             }
         };
         queue.add(postRequest);
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AllStaticMethod.logout(context);
     }
 }

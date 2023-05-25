@@ -9,9 +9,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -44,6 +46,7 @@ import rsarapp.com.adapter.GridViewAdapterSub;
 import rsarapp.com.modelClass.SetterGetter_Sub_Chap;
 import rsarapp.com.rsarapp.R;
 import rsarapp.com.rsarapp.databinding.ActivityDashBoardBinding;
+import rsarapp.com.ui.dialog.ProgressHUD;
 import rsarapp.com.utilities.AllStaticMethod;
 import rsarapp.com.utilities.AppConstant;
 
@@ -51,13 +54,15 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     Context context;
     ActivityDashBoardBinding binding;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     JSONArray Sub_Data;
     SetterGetter_Sub_Chap vinsgetter;
     ArrayList<SetterGetter_Sub_Chap> vinsquesarrayList;
     String Pref_Bg_Code, Pref_Top_Bg_Code, Pref_Button_Bg, Pref_School_UI, Pref_School_name, Pref_Restric_Id, Pref_UserType, Pref_Email, Pref_Mob, userStatus;
-    String Str_Status, Str_Msg, Details, Sub_Id, Sub_Name, Class_Id, Db_Class_Id, Str_Restrict_SD, Str_Otp_Value;
+    String Str_Status, Str_Msg, Details, Sub_Id, Sub_Name, Class_Id, Db_Class_Id, Str_Restrict_SD, Str_Otp_Value,userName;
     String Str_Act_Status, sVersionName;
     int sVersionCode;
+    ProgressHUD progressHUD;
     PackageInfo pinfo;
     public static String PACKAGE_NAME;
     Boolean isInternetPresent = false;
@@ -65,7 +70,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,28 +78,30 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         context = DashBoardActivity.this;
         toolbar = findViewById(R.id.dashboardToolbar);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
-        Pref_School_UI = preferences.getString("Rsar_School_UI", "");
+        Pref_School_UI = preferences.getString("Rsar_School_UI", "NTY=");
         Pref_School_name = preferences.getString("Rsar_School_Name", "");
         Pref_Bg_Code = preferences.getString("Rsar_Bg_Code", "");
         Pref_Top_Bg_Code = preferences.getString("Rsar_Top_Bg_Code", "");
         Pref_Button_Bg = preferences.getString("Rsar_Button_Bg", "");
         Pref_Restric_Id = preferences.getString("Rsar_Restric_ID", "");
-        Str_Otp_Value = preferences.getString("Rsar_Otp_Value", "");//Rsar_Otp_Value
+        Str_Otp_Value = preferences.getString("Rsar_Otp_Value", "");
         Pref_Email = preferences.getString("Rsar_Pref_Email", "");
         Pref_Mob = preferences.getString("Rsar_Pref_Mobile", "");
         Db_Class_Id = preferences.getString("Rsar_ClassID", "");
         Pref_UserType = preferences.getString("Rsar_UserType", "");
         Str_Act_Status = preferences.getString("Rsar_Act_Status", "");
         userStatus = preferences.getString("rsar_registered_user_status", "");
+        userName = preferences.getString("rsar_registered_user_name", "");
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
 
@@ -112,11 +118,13 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         if (isInternetPresent) {
             if (userStatus.matches("True")) {
                 if (Pref_UserType.equalsIgnoreCase("Teacher")) {
-                    binding.dashboardToolbar.txtHeading.setText("Class");
+                    binding.dashboardToolbar.txtHeading.setText("All Class");
                     callClassUrl();
+                    callProgressBar();
                 } else {
-                    binding.dashboardToolbar.txtHeading.setText("Subject");
+                    binding.txtClassName.setVisibility(View.VISIBLE);
                     callSubjectURl(Db_Class_Id);
+                    callProgressBar();
                 }
             } else {
                 startActivity(new Intent(context, LoginPageActivity.class));
@@ -131,20 +139,27 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view) {
                 AllStaticMethod.logout(context);
-                startActivity(new Intent(context, LoginPageActivity.class));
+                Intent intent = new Intent(context, LoginPageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
                 finishAffinity();
             }
         });
 
-        if (userStatus != null) {
-            View headerLayout = navigationView.getHeaderView(0);
-            TextView headerUserName = (TextView) headerLayout.findViewById(R.id.txtUserName);
-            TextView headerUserEmail = (TextView) headerLayout.findViewById(R.id.txtUserName);
-
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView headerUserName = (TextView) headerLayout.findViewById(R.id.txtUserName);
+        TextView headerUserEmail = (TextView) headerLayout.findViewById(R.id.txtUserEmail);
+        if (userName.isEmpty()) {
+            headerUserEmail.setText(Pref_Email);
+        }
+        else {
+            headerUserName.setText(AllStaticMethod.capitalizeWord(userName));
+            headerUserEmail.setText(Pref_Email);
         }
 
     }
-
     private void callClassUrl() {
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -230,8 +245,8 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                                     });
                                     dialogss.show();
                                 }
-//                                if (dialog.isShowing())
-//                                    dialog.dismiss();
+                                if (progressHUD.isShowing())
+                                    progressHUD.dismiss();
                             }
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block
@@ -265,7 +280,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
-
     private void callSubjectURl(String userClassId) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -286,9 +300,15 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                                 Str_Status = object.get("Status").toString();
                                 Str_Msg = object.get("Message").toString();
                                 Str_Restrict_SD = object.get("Restrict_SD").toString();
+                                String Class_Name = object.get("Class_Title").toString();
+                                preferences = getApplicationContext().getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
+                                editor = preferences.edit();
+                                editor.putString("rsar_class_name", Class_Name);
+                                editor.commit();
+                                editor.apply();
                                 if (Str_Status.equalsIgnoreCase("True")) {
                                     Sub_Data = object.getJSONArray("SubjectData");
-                                    System.out.println("Sub_Data" + "  " + Sub_Data + "  " + object.get("SubjectData").toString());
+                                    binding.dashboardToolbar.txtHeading.setText(Class_Name);
                                     for (int j = 0; j < Sub_Data.length(); j++) {
                                         JSONObject ObjectData;
                                         ObjectData = new JSONObject(Sub_Data.getJSONObject(j).toString());
@@ -300,8 +320,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                                         vinsquesarrayList.add(vinsgetter);
                                         GridViewAdapterSub adapter = new GridViewAdapterSub(context, vinsquesarrayList);
                                         binding.gridView.setAdapter(adapter);
-//                                        String SQLiteDataBaseSubQueryHolder = "INSERT INTO " + DBHandlerSub.TABLE_NAME + "" + " (Str_Subject_Name,Str_Subject_Id) VALUES('" + SubName + "', '" + SubId + "')";
-//                                        sqLiteDatabaseSub.execSQL(SQLiteDataBaseSubQueryHolder);
                                         binding.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -352,10 +370,8 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                                     });
                                     dialogss.show();
                                 }
-
-//                                if (dialog.isShowing())
-//                                    dialog.dismiss();
-//                                sqLiteDatabaseSub.close();
+                                if (progressHUD.isShowing())
+                                    progressHUD.dismiss();
                             }
 
                         } catch (JSONException e) {
@@ -390,13 +406,11 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -404,14 +418,15 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
 
                 if (userStatus != null) {
                     startActivity(new Intent(context, MyProfileActivity.class));
+                    overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
                 }
                 break;
 
             case R.id.navShare:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Astro Express");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
                 startActivity(Intent.createChooser(shareIntent, "share via"));
                 break;
 
@@ -424,7 +439,8 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    finish();
+                    overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                    finishAffinity();
                 }
                 break;
         }
@@ -432,6 +448,24 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+    private void callProgressBar(){
+        String message = "Please Wait....";
+        progressHUD = new ProgressHUD(context, R.style.ProgressHUD);
+        progressHUD.setTitle("");
+        progressHUD.setContentView(R.layout.progress_hudd);
+        if (message == null || message.length() == 0) {
+            progressHUD.findViewById(R.id.message).setVisibility(View.GONE);
+        } else {
+            TextView txt = (TextView) progressHUD.findViewById(R.id.message);
+            txt.setText(message);
+        }
+        progressHUD.setCancelable(true);
+        progressHUD.getWindow().getAttributes().gravity = Gravity.CENTER;
+        WindowManager.LayoutParams lp = progressHUD.getWindow().getAttributes();
+        lp.dimAmount = 0.2f;
+        progressHUD.getWindow().setAttributes(lp);
+        progressHUD.show();
     }
 
 }

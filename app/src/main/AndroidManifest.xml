@@ -88,7 +88,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="rsarapp.com.ui.activityList.ChapterListActivity"
+            android:name="rsarapp.com.ui.activityList.ChapterVideoPlayBackActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="rsarapp.com.ui.activityList.SubjectActivity"
