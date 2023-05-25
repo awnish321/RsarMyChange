@@ -24,11 +24,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     String Pref_UserType,Pref_UserClassID,userStatus;
     String Device_Id,Mob_Id,Mob_Product,Mob_Brand,Mob_Manufacture,Mob_Model;
     private static final int TIME = 4000;// 4 seconds
-    PackageInfo pinfo;
-    public static String PACKAGE_NAME;
-    String sVersionName;
-    int sVersionCode;
-    ArrayList deviceDetail=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +34,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         isInternetPresent =AllStaticMethod.isOnline(context);
         saveDeviceDetailToSharedReference();
 
-        PACKAGE_NAME = getApplicationContext().getPackageName();
-        preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
+        preferences = getApplicationContext().getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
         Pref_UserType = preferences.getString("Rsar_UserType", "");
         Pref_UserClassID = preferences.getString("Rsar_ClassID", "");
         userStatus = preferences.getString("rsar_registered_user_status","");
@@ -66,12 +60,12 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }else
                 {
                     AllStaticMethod.showAlertDialog(context, "No Internet Connection",
-                            "You don't have internet connection.", false);                }
+                            "You don't have internet connection.", false);
+                }
             }
 
         }, TIME);
     }
-
     private void saveDeviceDetailToSharedReference() {
         Device_Id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         Mob_Id = android.os.Build.ID;

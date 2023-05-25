@@ -1,6 +1,5 @@
 package rsarapp.com.ui.activityList;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,55 +7,85 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 import com.viewpagerindicator.CirclePageIndicator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import rsarapp.com.adapter.HelpImageAdapter;
-import rsarapp.com.rsarapp.ShowWebView;
 import rsarapp.com.modelClass.response.BannerModel;
 import rsarapp.com.rsarapp.R;
+import rsarapp.com.rsarapp.databinding.ActivityOptionBinding;
+import rsarapp.com.utilities.AllStaticMethod;
 import rsarapp.com.utilities.AppConstant;
 
-public class OptionActivity extends Activity {
-
-    String Pref_Bg_Code, Pref_Top_Bg_Code, Pref_Button_Bg, Pref_School_UI, Pref_School_name, Pref_Restric_Id;
+public class OptionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    String Pref_Bg_Code, Pref_Top_Bg_Code, Pref_Button_Bg, Pref_School_UI, Pref_School_name, Pref_Restric_Id, userName, Pref_Email;
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    LinearLayout ln_bg, ln_rsarapp, ln_pp, ln_ep, ln_trm, ln_help;
     String Book_Id, Book_Name, Class_Id, Subject_Id, Practice_Paper, Exam_Paper, TRM, Practice_Paper_Value, Exam_Paper_Value, TRM_Value, Rsar_Value, Op_Diff_Play, Str_Status, Str_Msg;
 
     //-----------Slider--------------------------
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-//    private ArrayList<ImageModel> imageModelArrayList;
     private ArrayList<BannerModel.BannerDatum> bannerDatumArrayList;
     private BannerModel.BannerDatum bannerDatum;
-//    private int[] myImageList = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3, R.drawable.img4, R.drawable.img5};
     JSONArray Banner_Data;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    Context context;
+    ActivityOptionBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_option);
+        binding = ActivityOptionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        context = OptionActivity.this;
+
+        toolbar = findViewById(R.id.optionDashboard);
+
+        navigationView = findViewById(R.id.nav_view);
+        binding.navView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        binding.optionDashboard.txtHeading.setText("RSAR APP");
 
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
         Pref_School_UI = preferences.getString("Rsar_School_UI", "");
@@ -65,6 +94,8 @@ public class OptionActivity extends Activity {
         Pref_Top_Bg_Code = preferences.getString("Rsar_Top_Bg_Code", "");
         Pref_Button_Bg = preferences.getString("Rsar_Button_Bg", "");
         Pref_Restric_Id = preferences.getString("Rsar_Restric_ID", "");
+        userName = preferences.getString("rsar_registered_user_name", "");
+        Pref_Email = preferences.getString("Rsar_Pref_Email", "");
 
         Class_Id = getIntent().getExtras().getString("Rsar_Class_Id");
         Subject_Id = getIntent().getExtras().getString("Rsar_Subject_Id");
@@ -80,70 +111,31 @@ public class OptionActivity extends Activity {
         TRM_Value = getIntent().getExtras().getString("Rsar_TRM_Value");
         Rsar_Value = getIntent().getExtras().getString("Rsar_RSAR_Value");
 
-//        imageModelArrayList = new ArrayList<>();
-//        imageModelArrayList = populateList();
-        callHelpBannerApi();
-        ButtonsDetails();
-    }
-
-//    private ArrayList<ImageModel> populateList() {
-//
-//        ArrayList<ImageModel> list = new ArrayList<>();
-//
-//        for (int i = 0; i < 5; i++) {
-//            ImageModel imageModel = new ImageModel();
-//            imageModel.setImage_drawable(myImageList[i]);
-//            list.add(imageModel);
-//        }
-//
-//        return list;
-//    }
-
-    private void ButtonsDetails() {
-
-      /*  ln_bg = (LinearLayout)findViewById(R.id.Lnr_Bg);
-        ln_bg.setBackgroundColor(Color.parseColor(Pref_Bg_Code));*/
-        Button btn_Rsarapp = (Button) findViewById(R.id.Btn_Rsarapp);
-        Button btn_PP = (Button) findViewById(R.id.Btn_PP);
-        Button btn_Ep = (Button) findViewById(R.id.Btn_Ep);
-        Button btn_TRM = (Button) findViewById(R.id.Btn_TRM);
-        LinearLayout LinearLayoutHelp = (LinearLayout) findViewById(R.id.llHelp);
-        ln_rsarapp = (LinearLayout) findViewById(R.id.Lnr_Rsarapp);
-        ln_pp = (LinearLayout) findViewById(R.id.Lnr_PP);
-        ln_ep = (LinearLayout) findViewById(R.id.Lnr_EP);
-        ln_trm = (LinearLayout) findViewById(R.id.Lnr_TRM);
-        ln_help = (LinearLayout) findViewById(R.id.Lnr_Help);
-
-        System.out.println("Value Check" + " " + Rsar_Value + " " + Practice_Paper_Value + " " + Exam_Paper_Value + " " + TRM_Value);
-
-        if (Rsar_Value.equalsIgnoreCase("True")) {
-            ln_rsarapp.setVisibility(View.VISIBLE);
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView headerUserName = (TextView) headerLayout.findViewById(R.id.txtUserName);
+        TextView headerUserEmail = (TextView) headerLayout.findViewById(R.id.txtUserEmail);
+        if (userName.isEmpty()) {
+            headerUserEmail.setText(Pref_Email);
         } else {
-            ln_rsarapp.setVisibility(View.GONE);
+            headerUserName.setText(AllStaticMethod.capitalizeWord(userName));
+            headerUserEmail.setText(Pref_Email);
         }
-
-        if (Practice_Paper_Value.equalsIgnoreCase("True")) {
-            ln_pp.setVisibility(View.VISIBLE);
-        } else {
-            ln_pp.setVisibility(View.GONE);
-        }
-
-        if (Exam_Paper_Value.equalsIgnoreCase("True")) {
-            ln_ep.setVisibility(View.VISIBLE);
-        } else {
-            ln_ep.setVisibility(View.GONE);
-        }
-
-        if (TRM_Value.equalsIgnoreCase("True")) {
-            ln_trm.setVisibility(View.VISIBLE);
-        } else {
-            ln_trm.setVisibility(View.GONE);
-        }
-
-        btn_Rsarapp.setOnClickListener(new View.OnClickListener() {
+        binding.optionDashboard.imgLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AllStaticMethod.logout(context);
+                Intent intent = new Intent(context, LoginPageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                finishAffinity();
+            }
+        });
+        binding.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OptionActivity.this, ChapterListActivity.class);
+                Intent intent = new Intent(OptionActivity.this, ChapterVideoPlayBackActivity.class);
                 intent.putExtra("Rsar_Book_Id", Book_Id);
                 intent.putExtra("Rsar_Subject_Id", Subject_Id);
                 intent.putExtra("Rsar_Class_Id", Class_Id);
@@ -154,7 +146,7 @@ public class OptionActivity extends Activity {
 
             }
         });
-        LinearLayoutHelp.setOnClickListener(new View.OnClickListener() {
+        binding.btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -205,35 +197,10 @@ public class OptionActivity extends Activity {
                 dialogss.show();
             }
         });
-        btn_PP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setClass(getApplicationContext(), ShowWebView.class);
-                intent.putExtra("Linkpass", Practice_Paper);
-                startActivity(intent);
-            }
-        });
-        btn_Ep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setClass(getApplicationContext(), ShowWebView.class);
-                intent.putExtra("Linkpass", Exam_Paper);
-                startActivity(intent);
-            }
-        });
-        btn_TRM.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setClass(getApplicationContext(), ShowWebView.class);
-                intent.putExtra("Linkpass", TRM);
-                startActivity(intent);
-            }
-        });
+        callHelpBannerApi();
     }
+
     private void callHelpBannerApi() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -328,6 +295,42 @@ public class OptionActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navProfile:
+
+                startActivity(new Intent(context, MyProfileActivity.class));
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+
+                break;
+
+            case R.id.navShare:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
+                startActivity(Intent.createChooser(shareIntent, "share via"));
+                break;
+
+            case R.id.navLogout:
+
+                AllStaticMethod.logout(context);
+                Intent intent = new Intent(context, LoginPageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                finishAffinity();
+
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
 }

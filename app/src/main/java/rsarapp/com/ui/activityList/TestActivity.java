@@ -11,7 +11,7 @@ import android.widget.Toast;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rsarapp.com.adapter.TestAdapter;
+import rsarapp.com.adapter.TestGridAdapter;
 import rsarapp.com.api.RetrofitAPIService;
 import rsarapp.com.modelClass.response.TestResponseModel;
 import rsarapp.com.rsarapp.databinding.ActivityTestBinding;
@@ -53,7 +53,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        TestAdapter adapter = new TestAdapter(AllStaticField.testModel, context);
+        TestGridAdapter adapter = new TestGridAdapter(AllStaticField.testModel, context);
         binding.recyclerViewNew.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewNew.setAdapter(adapter);
     }

@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import rsarapp.com.rsarapp.R;
 
 public class AllStaticMethod {
-
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager;
         NetworkInfo wifiInfo, mobileInfo;
@@ -39,5 +38,15 @@ public class AllStaticMethod {
         myEdit.clear();
         myEdit.apply();
     }
+     public static String capitalizeWord(String str){
+            String[] words =str.split("\\s");
+            StringBuilder capitalizeWord= new StringBuilder();
+            for(String w:words){
+                String first=w.substring(0,1);
+                String afterfirst=w.substring(1);
+                capitalizeWord.append(first.toUpperCase()).append(afterfirst).append(" ");
+            }
+            return capitalizeWord.toString().trim();
+        }
 
 }

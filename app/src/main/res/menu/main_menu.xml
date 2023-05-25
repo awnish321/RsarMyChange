@@ -7,10 +7,10 @@
             android:icon="@drawable/user_24"
             android:title="My Profile" />
 
-        <item
-            android:id="@+id/navEditProfile"
-            android:icon="@drawable/edit_profile_24"
-            android:title="Edit Profile" />
+<!--        <item-->
+<!--            android:id="@+id/navEditProfile"-->
+<!--            android:icon="@drawable/edit_profile_24"-->
+<!--            android:title="Edit Profile" />-->
 
         <item
             android:id="@+id/navShare"

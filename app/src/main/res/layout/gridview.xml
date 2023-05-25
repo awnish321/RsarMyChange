@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:gravity="center"
         android:background="@drawable/button_design_background"
         android:orientation="vertical">
@@ -18,10 +18,11 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:maxLines="2"
+            android:ellipsize="end"
             android:padding="10dp"
             android:text="sssssss"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
 

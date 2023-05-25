@@ -39,10 +39,9 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import rsarapp.com.ui.activityList.ChapterListActivity;
+import rsarapp.com.ui.activityList.ChapterVideoPlayBackActivity;
 import rsarapp.com.modelClass.ChapterModel;
 import rsarapp.database.RecordDatabase;
-import rsarapp.com.rsarapp.ShowWebView;
 import rsarapp.com.dynamics.VideoPlayer;
 import rsarapp.com.rsarapp.R;
 import rsarapp.com.utilities.AllStaticMethod;
@@ -62,8 +61,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
     private RecordDatabase database;
     private String Save_Chapter_Id;
     File dirDeleteFolder;
-    public ChapterAdapter(Context context, ArrayList<ChapterModel> models)
-    {
+    public ChapterAdapter(Context context, ArrayList<ChapterModel> models) {
         this.context=context;
         this.models=models;
         database = new RecordDatabase(context);
@@ -87,12 +85,9 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         ChapterModel chapterModel=models.get(position);
         if(chapterModel.getDownload_Status().contains("1")) {
             System.out.println("Download_fffff"+" "+" "+chapterModel.getDownload_Status());
-            ChapterListActivity.Download_Btn.setVisibility(View.GONE);
-            ChapterListActivity.Scan_Btn.setVisibility(View.VISIBLE);
+            ChapterVideoPlayBackActivity.Download_Btn.setVisibility(View.GONE);
+            ChapterVideoPlayBackActivity.Scan_Btn.setVisibility(View.VISIBLE);
         }
-
-        System.out.println("Download_Status"+" "+" "+chapterModel.getDownload_Status());
-
         if(chapterModel.getDownload_Status().equalsIgnoreCase("0")) {
             viewHolder.linearLayout.setVisibility(View.GONE);
             viewHolder.btnDownload.setVisibility(View.VISIBLE);
@@ -107,18 +102,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                 viewHolder.btnDelete.setVisibility(View.GONE);
             }
         }
-
-//        if(chapterModel.getAssesment_Value().equalsIgnoreCase("True"))
-//        {
-//            viewHolder.btnAssessment.setVisibility(View.VISIBLE);
-//        }else
-//        {
-//            viewHolder.btnAssessment.setVisibility(View.GONE);
-//        }
-
-    String download_status= database.getRecord(chapterModel.getBook_Name(),chapterModel.getDownload_Status());
-
-        System.out.println("gettinvid"+"  "+download_status+"  "+database.getRecord(chapterModel.getBook_Name(), chapterModel.getDownload_Status())+" "+RecordDatabase.Save_Download_Status.toString());
 
         viewHolder.txtChapterName.setText(chapterModel.getChapter_Name());
         viewHolder.btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -137,60 +120,16 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                     intent.putExtra("VideoUrl",context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
                             +"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+Str_Class_Name+"/"+Str_Sub_Name+"/"+Str_Book_Name+"/"+model.getZip_Name()
                             +"/videos"+"/"+model.getVideo_Name()+".mp4");
-
-                    System.out.println("namingggg"+" "+Str_Zip_Name+" "+model.getVideo_Name());
-
                     context.startActivity(intent);
                 }else {
 
                     intent.putExtra("VideoUrl", Environment.getExternalStorageDirectory()
                             + "/.rsarapp" + "/" + Pref_School_Fb_Name + "/" + Str_Class_Name + "/" + Str_Sub_Name + "/" + Str_Book_Name + "/" + model.getZip_Name()
                             + "/videos" + "/" + model.getVideo_Name() + ".mp4");
-
-                    System.out.println("namingggg" + " " + Str_Zip_Name + " " + model.getVideo_Name());
-
                     context.startActivity(intent);
                 }
             }
         });
-//        viewHolder.btnAssessment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChapterModel model=models.get(position);
-//                Str_Chap_Name= model.getChapter_Name();
-//                Str_Class_Name  = model.getClass_Name();
-//                Str_Sub_Name = model.getSubject_Name();
-//                Str_Book_Name = model.getBook_Name();
-//                Str_Zip_Name = model.getZip_Name();
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                    System.out.println("namingggg"+" "+Str_Zip_Name+" "+Str_Book_Name);
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent .setClass(context,  ShowWebView.class);
-//                    intent .putExtra("Linkpass", "file://" +context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-//                            +"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+Str_Class_Name+"/"+Str_Sub_Name+"/"+Str_Book_Name+"/"+model.getZip_Name()
-//                            +"/assessment"+"/"+"index.html");
-//
-//                    System.out.println("Linksdetail"+"  "+"file://" +context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-//                            +"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+Str_Class_Name+"/"+Str_Sub_Name+"/"+Str_Book_Name+"/"+model.getZip_Name()
-//                            +"/assessment"+"/"+"index.html");
-//                    context.startActivity(intent );
-//                }else {
-//
-//                    System.out.println("namingggg" + " " + Str_Zip_Name + " " + Str_Book_Name);
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setClass(context, ShowWebView.class);
-//                    intent.putExtra("Linkpass", "file://" + Environment.getExternalStorageDirectory()
-//                            + "/.rsarapp" + "/" + Pref_School_Fb_Name + "/" + Str_Class_Name + "/" + Str_Sub_Name + "/" + Str_Book_Name + "/" + model.getZip_Name()
-//                            + "/assessment" + "/" + "index.html");
-//
-//                    System.out.println("Linksdetail" + "  " + "file://" + Environment.getExternalStorageDirectory()
-//                            + "/.rsarapp" + "/" + Pref_School_Fb_Name + "/" + Str_Class_Name + "/" + Str_Sub_Name + "/" + Str_Book_Name + "/" + model.getZip_Name()
-//                            + "/assessment" + "/" + "index.html");
-//                    context.startActivity(intent);
-//                }
-//            }
-//        });
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +166,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                     alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke NO event
-                            Toast.makeText(context, "You clicked on NO", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "You clicked on NO", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     });
@@ -287,7 +226,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         public TextView txtChapterName;
         public Button btnDownload;
         public Button btnPlay;
-//        public Button btnAssessment;
         public Button btnDelete;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -309,7 +247,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             this.holder=viewHolder;
             this.chapterModel = model;
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -319,7 +256,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
         }
-
         @Override
         protected String doInBackground(String... aurl) {
             int count;
@@ -361,7 +297,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             Log.d("ANDRO_ASYNC",progress[0]);
             mProgressDialog.setProgress(Integer.parseInt(progress[0]));
         }
-
         @Override
         protected void onPostExecute(String unused) {
             mProgressDialog.dismiss();
@@ -403,26 +338,18 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
 
             File archive = new File(filePath);
             try {
-
-
                 ZipFile zipfile = new ZipFile(archive);
                 for (Enumeration e = zipfile.entries(); e.hasMoreElements();) {
                     ZipEntry entry = (ZipEntry) e.nextElement();
                     unzipEntry(zipfile, entry, destinationPath);
                 }
-
-                System.out.println("saaaaaaa"+"     "+unzipLocation);
                 UnzipUtil d = new UnzipUtil(zipFile, unzipLocation);
                 d.unzip();
-
             } catch (Exception e) {
-
                 return false;
             }
-
             return true;
         }
-
         @Override
         protected void onPostExecute(Boolean result) {
             mProgressDialog.dismiss();
@@ -440,10 +367,10 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             chapterModel.setDownload_Status("1");
 
             holder.linearLayout.setVisibility(View.VISIBLE);
+//            holder.btnDownload.setVisibility(View.GONE);
             holder.btnDownload.setVisibility(View.GONE);
-            ChapterListActivity.Scan_Btn.setVisibility(View.VISIBLE);
-            ChapterListActivity.Download_Btn.setVisibility(View.GONE);
-            System.out.println("dfdfdfdfdddddd"+"   "+filev+"  "+chapterModel.getBook_Name());
+            ChapterVideoPlayBackActivity.Scan_Btn.setVisibility(View.VISIBLE);
+            ChapterVideoPlayBackActivity.Download_Btn.setVisibility(View.GONE);
         }
         private void unzipEntry(ZipFile zipfile, ZipEntry entry,
                                 String outputDir) throws IOException {
@@ -478,6 +405,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             if (!dir.mkdirs()) {
                 throw new RuntimeException("Can not create dir " + dir);
             }
-        }}
+        }
+    }
 
 }
