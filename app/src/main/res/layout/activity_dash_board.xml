@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="rsarapp.com.ui.activityList.DashBoardActivity">
+    tools:context="rsarapp.com.ui.activityList.DashBoardActivity"
+    tools:openDrawer="start">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -24,8 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/default_background"
-            android:id="@+id/lDefault"/>
+        <include
+            android:id="@+id/lDefault"
+            layout="@layout/default_background" />
 
         <LinearLayout
             android:id="@+id/Lnr_Bg"
@@ -65,6 +67,5 @@
         </LinearLayout>
 
     </FrameLayout>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

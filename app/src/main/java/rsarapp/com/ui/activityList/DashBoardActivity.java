@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +46,9 @@ import java.util.HashMap;
 
 import rsarapp.com.adapter.GridViewAdapterChapterBook;
 import rsarapp.com.adapter.GridViewAdapterSub;
+import rsarapp.com.adapter.HelpImageAdapter;
 import rsarapp.com.modelClass.SetterGetter_Sub_Chap;
+import rsarapp.com.modelClass.response.BannerModel;
 import rsarapp.com.rsarapp.R;
 import rsarapp.com.rsarapp.databinding.ActivityDashBoardBinding;
 import rsarapp.com.ui.dialog.ProgressHUD;
@@ -70,6 +75,13 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
+
+    private static ViewPager mPager;
+    private static int currentPage = 0;
+    private static int NUM_PAGES = 0;
+    private ArrayList<BannerModel.BannerDatum> bannerDatumArrayList;
+    private BannerModel.BannerDatum bannerDatum;
+    JSONArray Banner_Data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +90,7 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         context = DashBoardActivity.this;
         toolbar = findViewById(R.id.dashboardToolbar);
 
+        callHelpBannerApi();
         navigationView = findViewById(R.id.nav_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
@@ -147,14 +160,62 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
 //            }
 //        });
 
-        binding.dashboardToolbar.imgShare.setOnClickListener(new View.OnClickListener() {
+//        binding.dashboardToolbar.imgShare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//                shareIntent.setType("text/plain");
+//                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+//                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
+//                startActivity(Intent.createChooser(shareIntent, "share via"));
+//            }
+//        });
+        binding.dashboardToolbar.imgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
-                startActivity(Intent.createChooser(shareIntent, "share via"));
+                final Dialog dialogss = new Dialog(context);
+                dialogss.setContentView(R.layout.popup_help);
+                dialogss.setCancelable(true);
+
+                // set the custom dialog components - text, image and button
+                LinearLayout ln_outline = (LinearLayout) dialogss.findViewById(R.id.dia_ln_outline);
+
+                mPager = (ViewPager) dialogss.findViewById(R.id.pager);
+                mPager.setAdapter(new HelpImageAdapter(context, bannerDatumArrayList));
+                CirclePageIndicator indicator = (CirclePageIndicator) dialogss.findViewById(R.id.indicator);
+                indicator.setViewPager(mPager);
+                final float density = getResources().getDisplayMetrics().density;
+                indicator.setRadius(5 * density);
+                NUM_PAGES = bannerDatumArrayList.size();
+                // Auto start of viewpager
+                final Handler handler = new Handler();
+                final Runnable Update = new Runnable() {
+                    public void run() {
+                        if (currentPage == NUM_PAGES) {
+                            currentPage = 0;
+                        }
+                        mPager.setCurrentItem(currentPage++, true);
+                    }
+                };
+                indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        currentPage = position;
+
+                    }
+
+                    @Override
+                    public void onPageScrolled(int pos, float arg1, int arg2) {
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int pos) {
+
+                    }
+                });
+                dialogss.show();
             }
         });
 
@@ -476,6 +537,96 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         lp.dimAmount = 0.2f;
         progressHUD.getWindow().setAttributes(lp);
         progressHUD.show();
+    }
+
+    private void callHelpBannerApi() {
+        // TODO Auto-generated method stub
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlmanual = AppConstant.url + "banners.php?";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlmanual,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            bannerDatumArrayList = new ArrayList<>();
+                            bannerDatumArrayList.clear();
+                            JSONArray array;
+                            array = new JSONArray(response);
+                            JSONObject object = new JSONObject();
+                            for (int i = 0; i < array.length(); i++) {
+                                object = array.getJSONObject(i);
+
+                                Str_Status = object.get("Status").toString();
+
+                                Str_Msg = object.get("Message").toString();
+
+                                if (Str_Status.equalsIgnoreCase("True")) {
+                                    Banner_Data = object.getJSONArray("Banner_Data");
+
+                                    for (int j = 0; j < Banner_Data.length(); j++) {
+                                        JSONObject ObjectData;
+                                        ObjectData = new JSONObject(Banner_Data.getJSONObject(j).toString());
+                                        String BannerId = ObjectData.getString("Banner_Id");
+                                        String BannerURL = ObjectData.getString("Banner_URL");
+
+                                        bannerDatum = new BannerModel.BannerDatum();
+                                        bannerDatum.setBannerId(BannerId);
+                                        bannerDatum.setBannerURL(BannerURL);
+                                        bannerDatumArrayList.add(bannerDatum);
+                                    }
+
+                                } else {
+                                    final Dialog dialogss = new Dialog(DashBoardActivity.this);
+                                    dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    dialogss.setContentView(R.layout.alert_dialog);
+                                    dialogss.setCancelable(true);
+
+                                    // set the custom dialog components - text, image and button
+                                    LinearLayout ln_outline = (LinearLayout) dialogss.findViewById(R.id.dia_ln_outline);
+                                    View view = (View) dialogss.findViewById(R.id.dia_view);
+                                    TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
+                                    TextView text = (TextView) dialogss.findViewById(R.id.dia_error_msg);
+                                    text.setText(Str_Msg);
+                                    Button btn_yes = (Button) dialogss.findViewById(R.id.dia_b_yes);
+                                    ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+                                    view.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+                                    Error_text.setTextColor(Color.parseColor(Pref_Bg_Code));
+                                    btn_yes.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+
+                                    btn_yes.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialogss.dismiss();
+                                        }
+                                    });
+                                    dialogss.show();
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        // Log.d("Error.Response", error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected HashMap<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("action", "banner");
+                return params;
+            }
+        };
+        queue.add(postRequest);
+
     }
 
 }

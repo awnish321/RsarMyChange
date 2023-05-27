@@ -82,8 +82,9 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
     String Pref_Bg_Code,Pref_Top_Bg_Code,Pref_Button_Bg,Pref_School_UI,Pref_School_name,Pref_School_Fb_Name,Pref_Restric_Id,Pref_Download_Show;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    String Str_Status,Str_Msg,Details,Book_Id,Str_Book_Name,Str_DB_Book_Name,Class_Id,Subject_Id,Str_Restrict_SD,DataSet_Name,Asses_Value,
-            Cl_Diff_Play;
+    String Str_Status,Str_Msg,Details,Book_Id,Str_Book_Name,Str_DB_Book_Name,Class_Id,Subject_Id,Str_Restrict_SD,DataSet_Name,Asses_Value, Cl_Diff_Play;
+    String Book_Name, Practice_Paper, Exam_Paper, TRM, Practice_Paper_Value, Exam_Paper_Value, TRM_Value, Rsar_Value, Op_Diff_Play;
+
     private ProgressDialog mProgressDialog;
     String unzipLocation ;
     String zipFile ;
@@ -110,15 +111,22 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
         Pref_School_Fb_Name= preferences.getString("Rsar_Fd_School_Name", "");
         Pref_Restric_Id = preferences.getString("Rsar_Restric_ID", "");
 
+        Practice_Paper = getIntent().getExtras().getString("Rsar_Practice_Paper");
+        Exam_Paper = getIntent().getExtras().getString("Rsar_Exam_Paper");
+        TRM = getIntent().getExtras().getString("Rsar_TRM");
+        Practice_Paper_Value = getIntent().getExtras().getString("Rsar_Practice_Paper_Value");
+        Exam_Paper_Value = getIntent().getExtras().getString("Rsar_Exam_Paper_Value");
+        TRM_Value = getIntent().getExtras().getString("Rsar_TRM_Value");
+        Rsar_Value = getIntent().getExtras().getString("Rsar_RSAR_Value");
+
         Class_Id = getIntent().getExtras().getString("Rsar_Class_Id");
         Subject_Id= getIntent().getExtras().getString("Rsar_Subject_Id");
         Book_Id = getIntent().getExtras().getString("Rsar_Book_Id");
         Str_Book_Name= getIntent().getExtras().getString("Rsar_Book_Name");
-        Cl_Diff_Play = getIntent().getExtras().getString("Rsar_Op_Diff_Play");
-
+        Cl_Diff_Play = getIntent().getExtras().getString("Rsar_Diff_Play");
 
         TextView Sub_Title= (TextView)findViewById(R.id.Title_Sub_Chap) ;
-        Sub_Title.setText("CHAPTERS");
+        Sub_Title.setText(Str_Book_Name);
         Scan_Btn=(Button)findViewById(R.id.button_start);
         Download_Btn=(Button)findViewById(R.id.button_Download);
         recyclerView=(RecyclerView)findViewById(R.id.recyclerView);

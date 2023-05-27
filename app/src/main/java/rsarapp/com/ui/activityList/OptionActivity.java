@@ -71,6 +71,8 @@ public class OptionActivity extends AppCompatActivity implements NavigationView.
         binding = ActivityOptionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        callHelpBannerApi();
+
         context = OptionActivity.this;
 
         toolbar = findViewById(R.id.optionDashboard);
@@ -102,7 +104,6 @@ public class OptionActivity extends AppCompatActivity implements NavigationView.
         Book_Id = getIntent().getExtras().getString("Rsar_Book_Id");
         Book_Name = getIntent().getExtras().getString("Rsar_Book_Name");
         Op_Diff_Play = getIntent().getExtras().getString("Rsar_Diff_Play");
-
         Practice_Paper = getIntent().getExtras().getString("Rsar_Practice_Paper");
         Exam_Paper = getIntent().getExtras().getString("Rsar_Exam_Paper");
         TRM = getIntent().getExtras().getString("Rsar_TRM");
@@ -133,14 +134,62 @@ public class OptionActivity extends AppCompatActivity implements NavigationView.
 //            }
 //        });
 
-        binding.optionDashboard.imgShare.setOnClickListener(new View.OnClickListener() {
+//        binding.optionDashboard.imgShare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//                shareIntent.setType("text/plain");
+//                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+//                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
+//                startActivity(Intent.createChooser(shareIntent, "share via"));
+//            }
+//        });
+        binding.optionDashboard.imgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
-                startActivity(Intent.createChooser(shareIntent, "share via"));
+                final Dialog dialogss = new Dialog(context);
+                dialogss.setContentView(R.layout.popup_help);
+                dialogss.setCancelable(true);
+
+                // set the custom dialog components - text, image and button
+                LinearLayout ln_outline = (LinearLayout) dialogss.findViewById(R.id.dia_ln_outline);
+
+                mPager = (ViewPager) dialogss.findViewById(R.id.pager);
+                mPager.setAdapter(new HelpImageAdapter(context, bannerDatumArrayList));
+                CirclePageIndicator indicator = (CirclePageIndicator) dialogss.findViewById(R.id.indicator);
+                indicator.setViewPager(mPager);
+                final float density = getResources().getDisplayMetrics().density;
+                indicator.setRadius(5 * density);
+                NUM_PAGES = bannerDatumArrayList.size();
+                // Auto start of viewpager
+                final Handler handler = new Handler();
+                final Runnable Update = new Runnable() {
+                    public void run() {
+                        if (currentPage == NUM_PAGES) {
+                            currentPage = 0;
+                        }
+                        mPager.setCurrentItem(currentPage++, true);
+                    }
+                };
+                indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        currentPage = position;
+
+                    }
+
+                    @Override
+                    public void onPageScrolled(int pos, float arg1, int arg2) {
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int pos) {
+
+                    }
+                });
+                dialogss.show();
             }
         });
 
@@ -210,7 +259,7 @@ public class OptionActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
-        callHelpBannerApi();
+
     }
 
     private void callHelpBannerApi() {
