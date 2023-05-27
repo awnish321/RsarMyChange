@@ -1,5 +1,6 @@
 package rsarapp.com.ui.activityList;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -224,13 +225,13 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setAdapterValue()
     {
         chapterAdapter =new ChapterAdapter(ChapterVideoPlayBackActivity.this, chapterModels);
         recyclerView.setAdapter(chapterAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.getAdapter().notifyDataSetChanged();
-
+        chapterAdapter.notifyDataSetChanged();
     }
 
     private void GetChapterURl() {

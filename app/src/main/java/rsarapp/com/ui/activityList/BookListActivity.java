@@ -96,16 +96,26 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
             AllStaticMethod.showAlertDialog(context, "No Internet Connection",
                 "You don't have internet connection.", false);
         }
-        binding.dashboardToolbar.imgLogout.setOnClickListener(new View.OnClickListener() {
+//        binding.dashboardToolbar.imgLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AllStaticMethod.logout(context);
+//                Intent intent = new Intent(context, LoginPageActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+//                finishAffinity();
+//            }
+//        });
+        binding.dashboardToolbar.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AllStaticMethod.logout(context);
-                Intent intent = new Intent(context, LoginPageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
-                finishAffinity();
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
+                startActivity(Intent.createChooser(shareIntent, "share via"));
             }
         });
 

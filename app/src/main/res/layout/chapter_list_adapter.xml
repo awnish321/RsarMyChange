@@ -60,10 +60,9 @@
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:drawableEnd="@drawable/file_download_24"
-                    android:paddingHorizontal="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
                     android:text="download"
-                    android:textSize="20sp"
-                    android:visibility="gone"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
 

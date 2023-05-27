@@ -252,11 +252,13 @@ public class LoginPageActivity extends AppCompatActivity {
                         // do operations specific to this selection
                         Spin.setEnabled(true);
                         binding.llClass.setVisibility(View.VISIBLE);
+                        binding.txtClass.setVisibility(View.VISIBLE);
                         break;
                     case R.id.radioTeacher:
                         // do operations specific to this selection
                         Spin.setEnabled(false);
                         binding.llClass.setVisibility(View.GONE);
+                        binding.txtClass.setVisibility(View.GONE);
                         break;
                 }
             }

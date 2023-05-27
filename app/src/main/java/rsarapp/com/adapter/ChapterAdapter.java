@@ -84,7 +84,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position) {
         ChapterModel chapterModel=models.get(position);
         if(chapterModel.getDownload_Status().contains("1")) {
-            System.out.println("Download_fffff"+" "+" "+chapterModel.getDownload_Status());
             ChapterVideoPlayBackActivity.Download_Btn.setVisibility(View.GONE);
             ChapterVideoPlayBackActivity.Scan_Btn.setVisibility(View.VISIBLE);
         }
@@ -160,6 +159,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                                 database.updateDownloadStatus(model.getBook_Name(), model.getChapter_Id(), "0");
                                 model.setDownload_Status("0");
                                 notifyDataSetChanged();
+
                                 Toast.makeText(context, "Deleted.. ", Toast.LENGTH_SHORT).show();
                             }
                     });
@@ -367,7 +367,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             chapterModel.setDownload_Status("1");
 
             holder.linearLayout.setVisibility(View.VISIBLE);
-//            holder.btnDownload.setVisibility(View.GONE);
             holder.btnDownload.setVisibility(View.GONE);
             ChapterVideoPlayBackActivity.Scan_Btn.setVisibility(View.VISIBLE);
             ChapterVideoPlayBackActivity.Download_Btn.setVisibility(View.GONE);

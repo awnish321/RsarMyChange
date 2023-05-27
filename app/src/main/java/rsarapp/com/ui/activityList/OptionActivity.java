@@ -120,18 +120,30 @@ public class OptionActivity extends AppCompatActivity implements NavigationView.
             headerUserName.setText(AllStaticMethod.capitalizeWord(userName));
             headerUserEmail.setText(Pref_Email);
         }
-        binding.optionDashboard.imgLogout.setOnClickListener(new View.OnClickListener() {
+//        binding.optionDashboard.imgLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AllStaticMethod.logout(context);
+//                Intent intent = new Intent(context, LoginPageActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+//                finishAffinity();
+//            }
+//        });
+
+        binding.optionDashboard.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AllStaticMethod.logout(context);
-                Intent intent = new Intent(context, LoginPageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
-                finishAffinity();
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
+                startActivity(Intent.createChooser(shareIntent, "share via"));
             }
         });
+
         binding.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

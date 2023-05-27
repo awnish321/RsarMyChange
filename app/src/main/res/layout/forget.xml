@@ -60,8 +60,6 @@
                     android:gravity="center"
                     android:inputType="textEmailAddress"/>
 
-
-
                 <!--<TextView
                 android:id="@+id/dia_error_msg"
                 android:layout_width="wrap_content"
@@ -121,12 +119,10 @@
                     android:layout_gravity="center_vertical|bottom"
                     android:layout_marginRight="5dp"
                     android:textColor="#FFFFFF"
-
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"
                     android:background="#053a5a"
-                    android:textSize="15dp"
-                    />
+                    android:textSize="15dp" />
             </LinearLayout>
 
         </LinearLayout>
