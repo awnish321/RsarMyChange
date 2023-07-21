@@ -16,7 +16,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:src="@drawable/logo__2_"/>
+            android:src="@drawable/logo"/>
 
         <TextView
             android:id="@+id/txtTittle"
@@ -41,6 +41,14 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:src="@drawable/help_24"/>
+        <ImageView
+            android:id="@+id/imgSupport"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:padding="@dimen/_5sdp"
+            android:visibility="gone"
+            android:src="@drawable/support_24"/>
 
     </LinearLayout>
 

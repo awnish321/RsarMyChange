@@ -46,10 +46,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="rsarapp.com.ui.activityList.MyProfileActivity"
+            android:name="rsarapp.com.ui.activityList.ContactUsActivity"
             android:exported="false" />
         <activity
-            android:name="rsarapp.com.ui.activityList.TestActivity"
+            android:name="rsarapp.com.ui.activityList.MyProfileActivity"
             android:exported="false" />
         <activity
             android:name="rsarapp.com.ui.activityList.LoginPageActivity"
@@ -66,10 +66,10 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="optional" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
-        <activity
-            android:name="rsarapp.com.ui.activityList.OptionActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name="rsarapp.com.ui.activityList.SplashScreenActivity"
             android:exported="true"

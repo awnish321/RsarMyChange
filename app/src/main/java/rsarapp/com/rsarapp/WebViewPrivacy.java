@@ -23,7 +23,7 @@ public class WebViewPrivacy extends AppCompatActivity {
         progressDialog.setMessage("Wait.....");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        webView.loadUrl("http://www.rachnasagar.in/appResource/privacy-policy.html");
+        webView.loadUrl("https://www.rachnasagar.in/appResource/privacy-policy.html");
         // this will enable the javascript.
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());

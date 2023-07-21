@@ -20,14 +20,16 @@ public class ChapterModel implements Serializable {
     private String Download_Link;
     private String Download_Status;
     private String Assesment_Value;
+    private String Download_count;
 
     public String getClass_Name() {
         return Class_Name;
     }
 
-    public ChapterModel(String class_Name, String subject_Name,String book_Name, String school_UI, String restrict_SD, String class_ID, String message,
+
+    public ChapterModel(String class_Name, String subject_Name, String book_Name, String school_UI, String restrict_SD, String class_ID, String message,
                         String chapter_Id, String chapter_Name, String assessment_Name, String video_Name, String DB_Name,
-                        String download_Link, String Download_Status, String zip_Name,String assesment_Value, String dataSet_Name) {
+                        String download_Link, String Download_Status, String zip_Name, String assesment_Value, String dataSet_Name) {
         this.Class_Name = class_Name;
         this.Subject_Name = subject_Name;
         this.Book_Name=book_Name;

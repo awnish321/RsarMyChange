@@ -336,7 +336,10 @@ public class SubjectActivity extends AppCompatActivity implements NavigationView
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
                 startActivity(Intent.createChooser(shareIntent, "share via"));
                 break;
-
+            case R.id.navContact:
+                startActivity(new Intent(context,ContactUsActivity.class));
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                break;
             case R.id.navLogout:
                 AllStaticMethod.logout(context);
                 Intent intent = new Intent(context, LoginPageActivity.class);

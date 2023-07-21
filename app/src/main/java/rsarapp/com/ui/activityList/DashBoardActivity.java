@@ -1,11 +1,15 @@
 package rsarapp.com.ui.activityList;
 
+import static rsarapp.com.utilities.AppConstant.RC_APP_UPDATE;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +38,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
@@ -64,7 +78,7 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     SetterGetter_Sub_Chap vinsgetter;
     ArrayList<SetterGetter_Sub_Chap> vinsquesarrayList;
     String Pref_Bg_Code, Pref_Top_Bg_Code, Pref_Button_Bg, Pref_School_UI, Pref_School_name, Pref_Restric_Id, Pref_UserType, Pref_Email, Pref_Mob, userStatus;
-    String Str_Status, Str_Msg, Details, Sub_Id, Sub_Name, Class_Id, Db_Class_Id, Str_Restrict_SD, Str_Otp_Value,userName;
+    String Str_Status, Str_Msg, Details, Sub_Id, Sub_Name, Class_Id, Db_Class_Id, Str_Restrict_SD, Str_Otp_Value, userName;
     String Str_Act_Status, sVersionName;
     int sVersionCode;
     ProgressHUD progressHUD;
@@ -75,13 +89,18 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<BannerModel.BannerDatum> bannerDatumArrayList;
     private BannerModel.BannerDatum bannerDatum;
     JSONArray Banner_Data;
+
+    private AppUpdateManager mAppUpdateManager;
+    private int inAppUpdateType;
+    private Task<AppUpdateInfo> appUpdateInfoTask;
+    private InstallStateUpdatedListener installStateUpdatedListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +109,20 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         context = DashBoardActivity.this;
         toolbar = findViewById(R.id.dashboardToolbar);
 
+//IN APP UPDATE
+        mAppUpdateManager = AppUpdateManagerFactory.create(this);
+        appUpdateInfoTask = mAppUpdateManager.getAppUpdateInfo();
+        installStateUpdatedListener = installState -> {
+            if (installState.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackBarForCompleteUpdate();
+            }
+        };
+        mAppUpdateManager.registerListener(installStateUpdatedListener);
+        inAppUpdateType = AppUpdateType.IMMEDIATE;
+        inAppUpdate();
+
+//IN APP UPDATE
+
         callHelpBannerApi();
         navigationView = findViewById(R.id.nav_view);
         navigationView.bringToFront();
@@ -97,7 +130,8 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
 
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));drawerLayout.addDrawerListener(toggle);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
@@ -224,13 +258,13 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         TextView headerUserEmail = (TextView) headerLayout.findViewById(R.id.txtUserEmail);
         if (userName.isEmpty()) {
             headerUserEmail.setText(Pref_Email);
-        }
-        else {
+        } else {
             headerUserName.setText(AllStaticMethod.capitalizeWord(userName));
             headerUserEmail.setText(Pref_Email);
         }
 
     }
+
     private void callClassUrl() {
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -351,6 +385,7 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
+
     private void callSubjectURl(String userClassId) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -477,11 +512,13 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -501,10 +538,14 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
                 startActivity(Intent.createChooser(shareIntent, "share via"));
                 break;
 
+            case R.id.navContact:
+                startActivity(new Intent(context,ContactUsActivity.class));
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                break;
+
             case R.id.navLogout:
 
                 if (userStatus != null) {
-
                     AllStaticMethod.logout(context);
                     Intent intent = new Intent(context, LoginPageActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -520,7 +561,8 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
 
         return true;
     }
-    private void callProgressBar(){
+
+    private void callProgressBar() {
         String message = "Please Wait....";
         progressHUD = new ProgressHUD(context, R.style.ProgressHUD);
         progressHUD.setTitle("");
@@ -531,7 +573,7 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
             TextView txt = (TextView) progressHUD.findViewById(R.id.message);
             txt.setText(message);
         }
-        progressHUD.setCancelable(true);
+        progressHUD.setCancelable(false);
         progressHUD.getWindow().getAttributes().gravity = Gravity.CENTER;
         WindowManager.LayoutParams lp = progressHUD.getWindow().getAttributes();
         lp.dimAmount = 0.2f;
@@ -539,7 +581,7 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         progressHUD.show();
     }
 
-    private void callHelpBannerApi() {
+    private void callHelpBannerApi()  {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlmanual = AppConstant.url + "banners.php?";
@@ -627,6 +669,62 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
 
+    }
+
+    private void inAppUpdate() {
+
+        try {
+            // Checks that the platform will allow the specified type of update.
+            appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+                @Override
+                public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                            // For a flexible update, use AppUpdateType.FLEXIBLE
+                            && appUpdateInfo.isUpdateTypeAllowed(inAppUpdateType)) {
+                        // Request the update.
+
+                        try {
+                            mAppUpdateManager.startUpdateFlowForResult(
+                                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                                    appUpdateInfo,
+                                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                                    inAppUpdateType,
+                                    // The current activity making the update request.
+                                    DashBoardActivity.this,
+                                    // Include a request code to later monitor this update request.
+
+                                    RC_APP_UPDATE);
+                        } catch (IntentSender.SendIntentException ignored) {
+
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void popupSnackBarForCompleteUpdate() {
+        try {
+            Snackbar snackbar =
+                    Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "An update has just been downloaded.\nRestart to update",
+                            Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction("INSTALL", view -> {
+                if (mAppUpdateManager != null) {
+                    mAppUpdateManager.completeUpdate();
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            snackbar.show();
+
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }

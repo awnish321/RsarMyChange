@@ -66,7 +66,6 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
@@ -357,6 +356,11 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
                 startActivity(Intent.createChooser(shareIntent, "share via"));
                 break;
 
+            case R.id.navContact:
+                startActivity(new Intent(context,ContactUsActivity.class));
+                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
+                break;
+                
             case R.id.navLogout:
                 AllStaticMethod.logout(context);
                 Intent intent = new Intent(context, LoginPageActivity.class);
@@ -390,7 +394,6 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
         progressHUD.getWindow().setAttributes(lp);
         progressHUD.show();
     }
-
     private void callHelpBannerApi() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -480,6 +483,5 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
         queue.add(postRequest);
 
     }
-
 
 }

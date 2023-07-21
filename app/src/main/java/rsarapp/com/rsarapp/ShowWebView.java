@@ -32,15 +32,14 @@ public class ShowWebView extends Activity {
         
         startWebView(Uri);
          
-    }///storage/emulated/0/.rsarapp/Chapter1/videos/a.mp4
+    }
+    ///storage/emulated/0/.rsarapp/Chapter1/videos/a.mp4
      
     @SuppressLint("SetJavaScriptEnabled") private void startWebView(String url) {
          
         //Create new webview Client to show progress dialog
         //When opening a url or click on link
 
-
-         
         webView.setWebViewClient(new WebViewClient() {
             ProgressDialog progressDialog;
           
@@ -81,17 +80,10 @@ public class ShowWebView extends Activity {
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webView.setScrollbarFadingEnabled(false);
         webView.getSettings().setBuiltInZoomControls(true);
-
-
         webView.loadUrl(url);
 
 
     }
-
-
-
-
-
 
     // Open previous opened link from history on webview when back button pressed
      

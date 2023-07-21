@@ -21,7 +21,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_margin="@dimen/dimen_10dp"
-                    android:src="@drawable/logo__2_"/>
+                    android:src="@drawable/logo"/>
 
                 <TextView
                     android:id="@+id/txtUserName"

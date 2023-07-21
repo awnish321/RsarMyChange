@@ -14,8 +14,8 @@ android {
         applicationId "rsarapp.com.rsarapp"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 28
-        versionName "3.0"
+        versionCode 33
+        versionName "4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
     }
@@ -56,7 +56,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation 'com.google.ar:core:1.30.0'
 
@@ -71,6 +70,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0' //for retrofit conversion
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    implementation 'com.google.android.play:app-update:2.0.1'
 
 }
 

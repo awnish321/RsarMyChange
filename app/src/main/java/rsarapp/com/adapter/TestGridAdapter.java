@@ -20,7 +20,6 @@ public class TestGridAdapter extends RecyclerView.Adapter<TestGridAdapter.ViewHo
         this.listdata = listdata;
         this.context = context;
     }
-
     @NonNull
     @Override
     public TestGridAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

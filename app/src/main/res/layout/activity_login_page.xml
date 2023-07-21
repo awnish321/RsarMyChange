@@ -9,7 +9,7 @@
     tools:context="rsarapp.com.ui.activityList.LoginPageActivity">
 
     <include
-        android:id="@+id/toolbar_register"
+        android:id="@+id/toolbarRegister"
         layout="@layout/register_page_toolbar" />
 
     <LinearLayout
@@ -127,7 +127,7 @@
                         android:layout_height="match_parent"
                         android:hint="Name"
                         android:background="@color/white"
-                        android:padding="20dp"
+                        android:padding="10dp"
                         android:maxLines="1" />
 
                 </androidx.cardview.widget.CardView>
@@ -145,7 +145,7 @@
                         android:layout_height="match_parent"
                         android:hint="Email id"
                         android:inputType="textEmailAddress"
-                        android:padding="20dp"
+                        android:padding="10dp"
                         android:background="@color/white"
                         android:maxLines="1"/>
 
@@ -166,7 +166,7 @@
                         android:background="@color/white"
                         android:inputType="number"
                         android:maxLength="10"
-                        android:padding="20dp"/>
+                        android:padding="10dp"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -180,8 +180,9 @@
                         android:id="@+id/btnSubmit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:layout_marginVertical="@dimen/_5sdp"
-                        android:background="@drawable/submit_button_blank"
+                        android:background="@drawable/submit_button_design_background"
                         android:text="Submit"
                         android:textSize="20dp"
                         android:textStyle="bold" />
@@ -218,6 +219,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Privacy Policy"
+                            android:linksClickable="true"
                             android:textColor="#000000"
                             android:textSize="19dp" />
 

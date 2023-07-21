@@ -56,7 +56,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
     String unzipLocation ;
     String zipFile ;
     public static String Value;
-    String Str_Zip_Name,Str_Chap_Name,Str_Class_Name,Str_Sub_Name,Str_Book_Name,Pref_School_Fb_Name;;
+    String Str_Zip_Name,Str_Chap_Name,Str_Class_Name,Str_Sub_Name,Str_Book_Name,Pref_School_Fb_Name;
     boolean deleted_zip;
     private RecordDatabase database;
     private String Save_Chapter_Id;
@@ -81,7 +81,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         return viewHolder;
     }
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position)
+    {
         ChapterModel chapterModel=models.get(position);
         if(chapterModel.getDownload_Status().contains("1")) {
             ChapterVideoPlayBackActivity.Download_Btn.setVisibility(View.GONE);
@@ -106,6 +107,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         viewHolder.btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ChapterModel model=models.get(position);
 
                 Str_Zip_Name= model.getZip_Name();
@@ -121,7 +123,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                             +"/videos"+"/"+model.getVideo_Name()+".mp4");
                     context.startActivity(intent);
                 }else {
-
                     intent.putExtra("VideoUrl", Environment.getExternalStorageDirectory()
                             + "/.rsarapp" + "/" + Pref_School_Fb_Name + "/" + Str_Class_Name + "/" + Str_Sub_Name + "/" + Str_Book_Name + "/" + model.getZip_Name()
                             + "/videos" + "/" + model.getVideo_Name() + ".mp4");
@@ -129,10 +130,11 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                 }
             }
         });
-        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                 final ChapterModel model = models.get(position);
                 Str_Chap_Name = model.getChapter_Name();
                 Str_Class_Name = model.getClass_Name();
@@ -142,7 +144,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                     dirDeleteFolder= new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+Str_Class_Name+"/"+Str_Sub_Name+"/"+Str_Book_Name+"/"+model.getZip_Name()+"/");
                 } else{
                     dirDeleteFolder= new File(Environment.getExternalStorageDirectory()+"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+Str_Class_Name+"/"+Str_Sub_Name+"/"+Str_Book_Name+"/"+model.getZip_Name()+"/");
-            }
+                }
                 if (dirDeleteFolder.isDirectory())
                 {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
@@ -159,7 +161,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                                 database.updateDownloadStatus(model.getBook_Name(), model.getChapter_Id(), "0");
                                 model.setDownload_Status("0");
                                 notifyDataSetChanged();
-
                                 Toast.makeText(context, "Deleted.. ", Toast.LENGTH_SHORT).show();
                             }
                     });
@@ -179,7 +180,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         });
         viewHolder.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 ChapterModel model=models.get(position);
                 String DwlndLink=model.getDownload_Link();/*(Integer)v.getTag();*/
                 Str_Zip_Name=model.getZip_Name();
@@ -199,11 +201,10 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                     Log.d("vtvt1",""+unzipLocation);
                     System.out.println("dinaadddaaa" + "  "+ DwlndLink+" "+Str_Zip_Name+" "+Str_Book_Name+" "+unzipLocation);
                 }
-
                 Value=null;
                 isInternetPresent = AllStaticMethod.isOnline(context);
-                // check for Internet status
-                if (isInternetPresent) {
+                if (isInternetPresent)
+                {
                     Save_Chapter_Id = model.getChapter_Id();
                     DownloadMapAsync mew = new DownloadMapAsync(viewHolder, model);
                     mew.execute(DwlndLink);
@@ -213,14 +214,14 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                     }else{
                         zipFile = Environment.getExternalStorageDirectory()+"/"+Str_Zip_Name+".zip";
                     }
-                } else {
-                    AllStaticMethod.showAlertDialog(context, "No Internet Connection",
-                            "You don't have internet connection.", false);
+                } else
+                {
+                    AllStaticMethod.showAlertDialog(context, "No Internet Connection", "You don't have internet connection.", false);
                 }
             }
-        });
+        }
+        );
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         public TextView txtChapterName;
@@ -313,7 +314,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             }
         }
     }
-
     public void unzip(final ViewHolder holder, ChapterModel model) throws IOException {
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setMessage("Please Wait...");

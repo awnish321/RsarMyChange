@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/titlebar"
+        android:background="@drawable/button_design_background"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -364,13 +364,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete1"
+                     android:id="@+id/delete_241"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -431,13 +431,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete2"
+                     android:id="@+id/delete_242"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -496,13 +496,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete3"
+                     android:id="@+id/delete_243"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -559,13 +559,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete4"
+                     android:id="@+id/delete_244"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -624,13 +624,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete5"
+                     android:id="@+id/delete_245"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -689,13 +689,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete6"
+                     android:id="@+id/delete_246"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -753,13 +753,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete7"
+                     android:id="@+id/delete_247"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -817,13 +817,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete8"
+                     android:id="@+id/delete_248"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -881,13 +881,13 @@
 
                  
                   <ImageView
-                     android:id="@+id/img_delete9"
+                     android:id="@+id/delete_249"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
                 </LinearLayout>
 
         </LinearLayout>
@@ -943,13 +943,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete10"
+                     android:id="@+id/delete_2410"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -1006,13 +1006,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete11"
+                     android:id="@+id/delete_2411"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 
@@ -1070,13 +1070,13 @@
 
                  
                   <ImageView
-                     android:id="@+id/img_delete12"
+                     android:id="@+id/delete_2412"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
                 </LinearLayout>
 
         </LinearLayout>
@@ -1133,13 +1133,13 @@
                  
                  
                   <ImageView
-                     android:id="@+id/img_delete13"
+                     android:id="@+id/delete_2413"
                      android:layout_width="22dp"
                      android:layout_height="22dp"
                      android:layout_marginTop="2dp"
                      android:layout_marginLeft="3dp"
                      android:visibility="gone"
-                     android:src="@drawable/img_delete" />
+                     android:src="@drawable/delete_24" />
 
                 </LinearLayout>
 

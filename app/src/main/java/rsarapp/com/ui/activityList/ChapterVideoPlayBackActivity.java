@@ -1,6 +1,5 @@
 package rsarapp.com.ui.activityList;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -14,9 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-
-
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -56,14 +52,14 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import rsarapp.com.ui.dialog.ProgressHUD;
 import rsarapp.com.adapter.ChapterAdapter;
 import rsarapp.com.modelClass.ChapterModel;
-import rsarapp.database.RecordDatabase;
 import rsarapp.com.rsarapp.R;
+import rsarapp.com.ui.dialog.ProgressHUD;
 import rsarapp.com.utilities.AllStaticMethod;
 import rsarapp.com.utilities.AppConstant;
 import rsarapp.com.utilities.UnzipUtil;
+import rsarapp.database.RecordDatabase;
 
 public class ChapterVideoPlayBackActivity extends AppCompatActivity {
 
@@ -75,23 +71,33 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
     private static String mClassToLaunchPackage;
     ProgressHUD dialog;
     String message = "Please Wait....";
-    ProgressDialog progressDialog;
-    // flag for Internet connection status
     Boolean isInternetPresent = false;
-    // Connection detector class
     String Pref_Bg_Code,Pref_Top_Bg_Code,Pref_Button_Bg,Pref_School_UI,Pref_School_name,Pref_School_Fb_Name,Pref_Restric_Id,Pref_Download_Show;
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    String Str_Status,Str_Msg,Details,Book_Id,Str_Book_Name,Str_DB_Book_Name,Class_Id,Subject_Id,Str_Restrict_SD,DataSet_Name,Asses_Value, Cl_Diff_Play;
-    String Book_Name, Practice_Paper, Exam_Paper, TRM, Practice_Paper_Value, Exam_Paper_Value, TRM_Value, Rsar_Value, Op_Diff_Play;
-
+    String Str_Msg;
+    String Book_Id;
+    String Str_Book_Name;
+    String Str_DB_Book_Name;
+    String Class_Id;
+    String Subject_Id;
+    String DataSet_Name;
+    String Asses_Value;
+    String Cl_Diff_Play;
+    String Practice_Paper;
+    String Exam_Paper;
+    String TRM;
+    String Practice_Paper_Value;
+    String Exam_Paper_Value;
+    String TRM_Value;
+    String Rsar_Value;
+    int count=0;
     private ProgressDialog mProgressDialog;
     String unzipLocation ;
     String zipFile ;
     public static String Value;
     boolean deleted_zip;
     Context context;
-
+    private ArrayList<ChapterModel> models;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,13 +164,10 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
             WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
             lp.dimAmount = 0.2f;
             dialog.getWindow().setAttributes(lp);
-
             dialog.show();
-
-
-
             // Toast.makeText(getApplicationContext(), "available", Toast.LENGTH_LONG).show();
-        }else
+        }
+        else
         {
             Str_DB_Book_Name= getIntent().getExtras().getString("Rsar_DB_Book_Name");
             RecordDatabase database = new RecordDatabase(ChapterVideoPlayBackActivity.this);
@@ -174,8 +177,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                 // Toast.makeText(getApplicationContext(), "not  available", Toast.LENGTH_LONG).show();
             }
             else{
-
-
                 final Dialog dialogss = new Dialog(ChapterVideoPlayBackActivity.this);
                 dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogss.setContentView(R.layout.alert_dialog);
@@ -188,9 +189,7 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                 TextView text = (TextView) dialogss.findViewById(R.id.dia_error_msg);
                 text.setText("Please Start your internet to load data.");
 
-
                 Button btn_yes = (Button) dialogss.findViewById(R.id.dia_b_yes);
-
 
                 ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
                 view.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
@@ -202,23 +201,16 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                         dialogss.dismiss();
                         finish();
                     }
-
                 });
-
-
                 dialogss.show();
             }
-
         }
     }
-    private void startARActivity() {
-        Log.d("aaa11","ttt");
-
+    private void startARActivity()
+    {
         try{
-            Log.d("aaa11","ttt22");
             mClassToLaunchPackage = getPackageName();
             mClassToLaunch = "rsarapp.com.app.VideoPlayback.VideoPlayback";
-
             Intent i = new Intent();
             i.putExtra("chapterModels", chapterModels);
             i.putExtra("Rsar_Cl_Diff_Play", Cl_Diff_Play);
@@ -230,24 +222,16 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
         catch(Exception e){
             System.out.println("gfgfgf"+"    "+e);
         }
-
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void setAdapterValue()
-    {
+    private void setAdapterValue() {
         chapterAdapter =new ChapterAdapter(ChapterVideoPlayBackActivity.this, chapterModels);
         recyclerView.setAdapter(chapterAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         chapterAdapter.notifyDataSetChanged();
     }
-
     private void GetChapterURl() {
 
-
-        // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
-
         String urlmanual = AppConstant.url+"chapter.php";
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlmanual,
                 new Response.Listener<String>()
@@ -260,12 +244,12 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                             RecordDatabase database = new RecordDatabase(ChapterVideoPlayBackActivity.this);
                             String downloadStatus ="0";
                             chapterModels = new ArrayList<>();
+                            models =new ArrayList<>();
                             JSONArray jsonArray=new JSONArray(response);
                             JSONObject jsonObject=jsonArray.getJSONObject(0);
                             String Status = jsonObject.getString("Status");
                             Str_Msg = jsonObject.getString("Message");
                             if(Status.equalsIgnoreCase("true"))
-
                             {
                                 String className = jsonObject.getString("Class_Name");
                                 String Subject_Name = jsonObject.getString("Subject_Name");
@@ -285,9 +269,7 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                             +"/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+className+"/"+jsonObject.getString("Subject_Name")+"/"+Book_Name+"/"+"DataSet/";
                                     //System.out.println("dinaadddaaa" + "  "+ DwlndLink+" "+zip_Name+" "+Str_Book_Name);
                                     Value=null;
-
                                     dir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-
                                     file = new File(dir, "/.rsarapp"+"/"+Pref_School_Fb_Name+"/"+className+"/"+jsonObject.getString("Subject_Name")+"/"+Book_Name+"/"+"DataSet/"+DataSet_Name/*+".xml"*/ );
                                     System.out.println("FILEEEss" + "  "+ file+"  "+DataSet_Name+"  "+unzipLocation);
                                 }else
@@ -302,7 +284,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                 }
                                 if (file.exists())
                                 {
-                                    //Do action
                                     System.out.println("FILEEE EXIST" + "  "+ file+" "+"True");
                                 }else
                                 {
@@ -310,19 +291,13 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                     DownloadMapAsync mew = new DownloadMapAsync();
                                     mew.execute(DataSet_Link);
                                 }
-                               /*DownloadMapAsync mew = new DownloadMapAsync();
-                                mew.execute(DataSet_Link);*/
                                 Value=DataSet_Name+".zip";
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                     zipFile = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+DataSet_Name+".zip";
-                                    System.out.println("DATAAAAA" + "  "+ DataSet_Link+" "+DataSet_Name+" "+jsonObject.getString("Subject_Name"));
-
                                 }else
                                 {
                                     zipFile = Environment.getExternalStorageDirectory()+"/"+DataSet_Name+".zip";
-                                    System.out.println("DATAAAAA" + "  "+ DataSet_Link+" "+DataSet_Name+" "+jsonObject.getString("Subject_Name"));
                                 }
-
                                 JSONArray chapterArray = new JSONArray(ChapterData);
                                 for (int i=0; i<chapterArray.length(); i++)
                                 {
@@ -333,17 +308,10 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                     if(database.getRecord(Book_Name, chapterObject.getString("Chapter_Id")).equals("1"))
                                     {
                                         downloadStatus ="1";
-                                        Log.e("downloadStatus", chapterObject.getString("Chapter_Id")+"\t"+downloadStatus);
                                     }else
                                     {
                                         downloadStatus = "0";
-                                        Log.e("downloadStatus", chapterObject.getString("Chapter_Id")+"\t"+downloadStatus);
                                     }
-
-                                /*    public ChapterModel(String class_Name, String subject_Name,String book_Name, String school_UI, String restrict_SD, String class_ID, String message,
-                                            String chapter_Id, String chapter_Name, String assessment_Name, String video_Name, String DB_Name, String zip_Name,
-                                            String download_Link, String Download_Status, String dataSet_Name)*/
-
                                     chapterModels.add(new ChapterModel(className, Subject_Name,Book_Name, School_UI, Restrict_SD, Class_ID, Message,
                                             chapterObject.getString("Chapter_Id"), chapterObject.getString("Chapter_Name"),
                                             chapterObject.getString("Assessment_Name"), chapterObject.getString("Video_Name"),
@@ -353,20 +321,16 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                     insertData(Class_ID, className,Subject_Name, Book_Name, chapterObject.getString("Chapter_Id"),
                                             chapterObject.getString("Chapter_Name"), chapterObject.getString("Video_Name"),
                                             chapterObject.getString("Download_Link"),downloadStatus,ZipName,Asses_Value,DataSet_Name);
-
                                 }
-
                                 if(chapterModels.size()!=0) {
                                     setAdapterValue();
-                                }else {
-                                    System.out.println("LLLLAAAAA"+"   "+chapterModels.size());
-
+                                }else
+                                {
                                     final Dialog dialogss = new Dialog(ChapterVideoPlayBackActivity.this);
                                     dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                     dialogss.setContentView(R.layout.alert_dialog);
                                     dialogss.setCancelable(true);
 
-                                    // set the custom dialog components - text, image and button
                                     LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
                                     View view=(View) dialogss.findViewById(R.id.dia_view);
                                     TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
@@ -385,9 +349,7 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                             dialogss.dismiss();
                                             finish();
                                         }
-
                                     });
-
                                     dialogss.show();
                                 }
                             }
@@ -398,7 +360,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                 dialogss.setContentView(R.layout.alert_dialog);
                                 dialogss.setCancelable(true);
 
-                                // set the custom dialog components - text, image and button
                                 LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
                                 View view=(View) dialogss.findViewById(R.id.dia_view);
                                 TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
@@ -416,12 +377,10 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                                     }
                                 });
                                 dialogss.show();
-
                             }
                             if (dialog.isShowing())
                                 dialog.dismiss();
                         } catch (JSONException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     }
@@ -449,8 +408,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                 params.put("bId", Book_Id);
                 params.put("action", "chapter");
                 params.put("Restrict_SD", Pref_Restric_Id);
-//                params.put("mdId", Device_Id);
-                Log.e("PARAMS", params.toString());
 
                 return params;
             }
@@ -458,8 +415,7 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void insertData(String classID, String className, String subjectName, String book_Name, String chapterId, String Chapter_Name, String videoName,
-                            String downloadLink, String status,String zipName,String assesValue,String dataSetName) {
+    private void insertData(String classID, String className, String subjectName, String book_Name, String chapterId, String Chapter_Name, String videoName, String downloadLink, String status,String zipName,String assesValue,String dataSetName) {
         RecordDatabase database = new RecordDatabase(ChapterVideoPlayBackActivity.this);
         int i=database.getProfilesCount();
         if (database.CheckIsDataAlreadyInDBorNot(book_Name, chapterId)) {
@@ -485,7 +441,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
 
     public class DownloadMapAsync extends AsyncTask<String, String, String> {
         String result ="";
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -505,7 +460,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
 		        });*/
             mProgressDialog.show();
         }
-
         @Override
         protected String doInBackground(String... aurl) {
             int count;
@@ -541,18 +495,14 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                 result = "false";
             }
             return null;
-
         }
         protected void onProgressUpdate(String... progress) {
             Log.d("ANDRO_ASYNC",progress[0]);
             mProgressDialog.setProgress(Integer.parseInt(progress[0]));
         }
-
         @Override
         protected void onPostExecute(String unused) {
             mProgressDialog.dismiss();
-
-
 
             if(result.equalsIgnoreCase("true")){
                 try {
@@ -593,7 +543,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                     unzipEntry(zipfile, entry, destinationPath);
                 }
 
-
                 UnzipUtil d = new UnzipUtil(zipFile, unzipLocation);
                 d.unzip();
 
@@ -608,7 +557,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             mProgressDialog.dismiss();
-
             ///button hide and show
             File filev;
             //  Toast.makeText(ChapterList.this, "Downloading completed...", Toast.LENGTH_LONG).show();
@@ -617,19 +565,12 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
             }else{
                 filev = new File(Environment.getExternalStorageDirectory(), DataSet_Name+".zip");
             }
-
             deleted_zip = filev.delete();
-
 
             System.out.println("dfdfdfdfdddddd"+"   "+filev);
         }
 
-
-        private void unzipEntry(ZipFile zipfile, ZipEntry entry,
-                                String outputDir) throws IOException {
-
-
-
+        private void unzipEntry(ZipFile zipfile, ZipEntry entry, String outputDir) throws IOException {
 
             if (entry.isDirectory()) {
                 createDir(new File(outputDir, entry.getName()));
@@ -640,7 +581,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
             if (!outputFile.getParentFile().exists()) {
                 createDir(outputFile.getParentFile());
             }
-
             // Log.v("", "Extracting: " + entry);
             BufferedInputStream inputStream = new BufferedInputStream(zipfile.getInputStream(entry));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
@@ -651,8 +591,6 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
                 outputStream.flush();
                 outputStream.close();
                 inputStream.close();
-
-
             }
         }
 
@@ -663,7 +601,8 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
             if (!dir.mkdirs()) {
                 throw new RuntimeException("Can not create dir " + dir);
             }
-        }}
+        }
+    }
 
     public void showAlertDialog(Context context, String title, String message, Boolean status) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
@@ -691,4 +630,23 @@ public class ChapterVideoPlayBackActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
+
+//    private void autoDownload ()
+//    {
+//        Value=null;
+//        isInternetPresent = AllStaticMethod.isOnline(context);
+//        if (isInternetPresent)
+//        {
+//            Value=Str_Zip_Name+".zip";
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                zipFile = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+Str_Zip_Name+".zip";
+//            }else{
+//                zipFile = Environment.getExternalStorageDirectory()+"/"+Str_Zip_Name+".zip";
+//            }
+//        } else {
+//            AllStaticMethod.showAlertDialog(context, "No Internet Connection", "You don't have internet connection.", false);
+//        }
+//    }
+
 }
+

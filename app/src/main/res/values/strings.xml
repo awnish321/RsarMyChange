@@ -37,5 +37,10 @@
     <string name="version_android">Android API level</string>
     <string name="navigation_drawer_open">navigation_drawer_open</string>
     <string name="navigation_drawer_close">navigation_drawer_close</string>
+    <string name="it_support"> itsupport@rachnasagar.in</string>
+    <string name="email">Email</string>
+    <string name="email_now">Email now</string>
+    <string name="toll_free">Toll-free</string>
+    <string name="address">Rachna Sagar Pvt. Ltd. 4583/15, Daryaganj, New Delhi, 110002 (INDIA)</string>
 
 </resources>

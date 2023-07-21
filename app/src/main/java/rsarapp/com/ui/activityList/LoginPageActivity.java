@@ -70,8 +70,8 @@ public class LoginPageActivity extends AppCompatActivity {
     ActivityLoginPageBinding binding;
     private static final int PERMISSION_CALLBACK_CONSTANT = 100;
     private static final int REQUEST_PERMISSION_SETTING = 101;
-    String[] permissionsRequired = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
-            .CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
+    String[] permissionsRequired = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
 
     private SharedPreferences permissionStatus;
     private boolean sentToSettings = false;
@@ -79,7 +79,7 @@ public class LoginPageActivity extends AppCompatActivity {
     ProgressHUD dialog;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    private String Str_Stu_Name, Str_Mobile, Str_Email_Id, Str_Msg, Str_UserType, Str_ClassID, Str_School_UI, Str_Status, Str_School_name, Str_Fd_School_name,Str_UserName;
+    private String Str_Stu_Name, Str_Mobile, Str_Email_Id, Str_Msg, Str_UserType, Str_ClassID, Str_School_UI, Str_Status, Str_School_name, Str_Fd_School_name, Str_UserName;
     private String Str_Bg_Code, Str_Top_Bg_Code, Str_Button_Bg, Str_Act_Status, Str_UserStatus, Str_Restric_ID, Str_Sch_Name_Color, Str_Otp_value, Pre_Email_Id, Pre_Mob_No;
     Boolean isInternetPresent = false;
     ArrayList<SetterGetter_Sub_Chap> vinsquesarrayList;
@@ -114,9 +114,11 @@ public class LoginPageActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         context = LoginPageActivity.this;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_register);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarRegister);
         setSupportActionBar(toolbar);
-//        ImageView img = (ImageView) toolbar.findViewById(R.id.imgHelp);
+
+        binding.toolbarRegister.imgHelp.setVisibility(View.GONE);
+        binding.toolbarRegister.imgSupport.setVisibility(View.VISIBLE);
 
         DeviceDetailModel deviceDetailModel = (DeviceDetailModel) MySharedPreferences.readUserDeviceDetail(context);
         Device_Id = deviceDetailModel.getDevice_Id();
@@ -131,6 +133,7 @@ public class LoginPageActivity extends AppCompatActivity {
         Pref_Bg_Code = preferences.getString("Rsar_Bg_Code", "");
         Spin = findViewById(R.id.spinner);
         PACKAGE_NAME = getApplicationContext().getPackageName();
+
         try {
             pinfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             sVersionCode = pinfo.versionCode; // 1
@@ -214,7 +217,6 @@ public class LoginPageActivity extends AppCompatActivity {
 
         GetAndroidPermission();
 
-        // FirebaseApp.initializeApp(context);
         isInternetPresent = AllStaticMethod.isOnline(context);
 
         if (isInternetPresent) {
@@ -242,7 +244,6 @@ public class LoginPageActivity extends AppCompatActivity {
         } else {
             AllStaticMethod.showAlertDialog(context, "No Internet Connection", "You don't have internet connection.", false);
         }
-
         binding.radioUser.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -308,6 +309,14 @@ public class LoginPageActivity extends AppCompatActivity {
             }
 
         });
+        binding.toolbarRegister.imgSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,ContactUsActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+            }
+        });
 
     }
 
@@ -315,7 +324,6 @@ public class LoginPageActivity extends AppCompatActivity {
     public void onBackPressed() {
         finish();
     }
-
     private void DropDownService() {
 
         // TODO Auto-generated method stub
@@ -418,7 +426,6 @@ public class LoginPageActivity extends AppCompatActivity {
         queue.add(postRequest);
 
     }
-
     private void ActivationCodeURL() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -535,7 +542,6 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
     private void GetAndroidPermission() {
 
         if (ActivityCompat.checkSelfPermission(context, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
@@ -600,7 +606,6 @@ public class LoginPageActivity extends AppCompatActivity {
 //            proceedAfterPermission();
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -645,7 +650,6 @@ public class LoginPageActivity extends AppCompatActivity {
             }
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -656,7 +660,6 @@ public class LoginPageActivity extends AppCompatActivity {
             }
         }
     }
-
     private void callForgetDialog() {
         forgetDetailDialog = new Dialog(context);
         forgetDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -688,12 +691,9 @@ public class LoginPageActivity extends AppCompatActivity {
                     callProgressBar();
                 }
             }
-
         });
-
         forgetDetailDialog.show();
     }
-
     private void callProgressBar() {
         String message = "Please Wait....";
         progressHUD = new ProgressHUD(context, R.style.ProgressHUD);
@@ -712,7 +712,6 @@ public class LoginPageActivity extends AppCompatActivity {
         progressHUD.getWindow().setAttributes(lp);
         progressHUD.show();
     }
-
     private void SendMsg(String userEmail) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -782,7 +781,6 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
     private void callHelpBannerApi() {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -867,7 +865,6 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
     private void openOtpDialogBox(String otpValue) {
 
         if (!otpValue.isEmpty()) {
@@ -914,7 +911,6 @@ public class LoginPageActivity extends AppCompatActivity {
             otpDialog.show();
         }
     }
-
     private void OtpRefresh() {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -971,7 +967,6 @@ public class LoginPageActivity extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
     private void OtpVerify(String verifyOtp) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlmanual = AppConstant.url + "checkOtp.php?";

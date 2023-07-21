@@ -40,30 +40,22 @@ String VideoUrl;
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setVisibility(View.VISIBLE);
         video_player_view.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
             @Override
             public void onPrepared(MediaPlayer mp) {
-
                 mp.start();
-
                 mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-
                     @Override
                     public void onVideoSizeChanged(MediaPlayer mp, int arg1, int arg2) {
-                        // TODO Auto-generated method stub
                         Log.e(TAG, "Changed");
                         progressBar.setVisibility(View.GONE);
                         mp.start();
                     }
                 });
-
-
             }
         });
 
        video_player_view.setOnCompletionListener(
                new MediaPlayer.OnCompletionListener() {
-
                    @Override
                    public void onCompletion(MediaPlayer mp) {
                        // not playVideo
@@ -75,10 +67,5 @@ String VideoUrl;
                    }
                }
        );
-
-
-
     }
-
-
 }

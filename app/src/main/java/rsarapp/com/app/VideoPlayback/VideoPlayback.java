@@ -23,7 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -39,7 +38,6 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.viewpagerindicator.CirclePageIndicator;
 import com.vuforia.CameraDevice;
 import com.vuforia.DataSet;
 import com.vuforia.DeviceTracker;
@@ -67,15 +65,13 @@ import rsarapp.com.SampleApplication.utils.Texture;
 import rsarapp.com.modelClass.ChapterModel;
 import rsarapp.com.modelClass.ImageModel;
 import rsarapp.com.rsarapp.R;
-import rsarapp.com.adapter.SlidingImageAdapter;
 import rsarapp.com.ui.sampleAppMenu.SampleAppMenu;
 import rsarapp.com.ui.sampleAppMenu.SampleAppMenuGroup;
 import rsarapp.com.ui.sampleAppMenu.SampleAppMenuInterface;
 
 
 // The AR activity for the VideoPlayback sample.
-public class VideoPlayback extends Activity implements SampleApplicationControl, SampleAppMenuInterface
-{
+public class VideoPlayback extends Activity implements SampleApplicationControl, SampleAppMenuInterface {
     private static final String LOGTAG = "VideoPlayback";
     private SampleApplicationSession vuforiaAppSession;
     private WeakReference<Activity> mActivityRef;
@@ -85,7 +81,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     private SimpleOnGestureListener gestureListener = null;
 
     // Movie for the Targets:
-    public static  int NUM_TARGETS = 70;
+    public static int NUM_TARGETS = 70;
     private DataSet mCurrentDataset;
 
     public static String Vpb_Diff_Play;
@@ -94,7 +90,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     private boolean mWasPlaying[] = null;
     private String mMovieName[] = null;
 
-    String Class_Name,Sub_Name,Book_Name,DataSet_Name,Pref_School_Fb_Name,Pref_Bg_Code,Different_Play;
+    String Class_Name, Sub_Name, Book_Name, DataSet_Name, Pref_School_Fb_Name, Pref_Bg_Code, Different_Play;
 
     // A boolean to indicate whether we come from full screen:
     private boolean mReturningFromFullScreen = false;
@@ -117,7 +113,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     private SampleAppMenu mSampleAppMenu;
 
     private final LoadingDialogHandler loadingDialogHandler = new LoadingDialogHandler(
-        this);
+            this);
 
     // Alert Dialog used to display SDK errors
     private AlertDialog mErrorDialog;
@@ -149,43 +145,43 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         startLoadingAnimation();
         imageModelArrayList = new ArrayList<>();
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
-        Pref_School_Fb_Name= preferences.getString("Rsar_Fd_School_Name", "");
+        Pref_School_Fb_Name = preferences.getString("Rsar_Fd_School_Name", "");
         Pref_Bg_Code = preferences.getString("Rsar_Bg_Code", "");
         Vpb_Diff_Play = preferences.getString("Pref_Diff_Play", "");
 
-        Cam_Butt=(Button)findViewById(R.id.button) ;
-        Cam_Butt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialogss = new Dialog(VideoPlayback.this);
-                dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogss.setContentView(R.layout.alert_dialog);
-                dialogss.setCancelable(true);
-
-                // set the custom dialog components - text, image and button
-                LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
-                View view=(View) dialogss.findViewById(R.id.dia_view);
-                TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
-                TextView text = (TextView) dialogss.findViewById(R.id.dia_error_msg);
-                text.setText("Please Start your internet to load data and wait for some time");
-                Button btn_yes = (Button) dialogss.findViewById(R.id.dia_b_yes);
-
-
-                ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
-                view.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
-                Error_text.setTextColor(Color.parseColor(Pref_Bg_Code));
-                btn_yes.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
-                btn_yes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                        dialogss.dismiss();
-                    }
-                });
-
-                dialogss.show();
-            }
-        });
+//        Cam_Butt=(Button)findViewById(R.id.button) ;
+//        Cam_Butt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Dialog dialogss = new Dialog(VideoPlayback.this);
+//                dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialogss.setContentView(R.layout.alert_dialog);
+//                dialogss.setCancelable(true);
+//
+//                // set the custom dialog components - text, image and button
+//                LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
+//                View view=(View) dialogss.findViewById(R.id.dia_view);
+//                TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
+//                TextView text = (TextView) dialogss.findViewById(R.id.dia_error_msg);
+//                text.setText("Please Start your internet to load data and wait for some time");
+//                Button btn_yes = (Button) dialogss.findViewById(R.id.dia_b_yes);
+//
+//
+//                ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+//                view.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+//                Error_text.setTextColor(Color.parseColor(Pref_Bg_Code));
+//                btn_yes.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+//                btn_yes.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        finish();
+//                        dialogss.dismiss();
+//                    }
+//                });
+//
+//                dialogss.show();
+//            }
+//        });
         vuforiaAppSession.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Load any sample specific textures:
@@ -196,7 +192,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
             NUM_TARGETS = myList.size();
             Log.e("myList", "llll  " + NUM_TARGETS);
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
             final Dialog dialogss = new Dialog(VideoPlayback.this);
             dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -204,8 +200,8 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
             dialogss.setCancelable(true);
 
             // set the custom dialog components - text, image and button
-            LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
-            View view=(View) dialogss.findViewById(R.id.dia_view);
+            LinearLayout ln_outline = (LinearLayout) dialogss.findViewById(R.id.dia_ln_outline);
+            View view = (View) dialogss.findViewById(R.id.dia_view);
             TextView Error_text = (TextView) dialogss.findViewById(R.id.dia_error_title);
             TextView text = (TextView) dialogss.findViewById(R.id.dia_error_msg);
             text.setText("Please Start your internet to load data and wait for some time");
@@ -235,15 +231,9 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         ChapterModel model = null;
 
 
-
-
-
-
-
-
         // Create the gesture detector that will handle the single and
         // double taps:
-         gestureListener = new SimpleOnGestureListener();
+        gestureListener = new SimpleOnGestureListener();
         mGestureDetector = new GestureDetector(getApplicationContext(), gestureListener);
 
         mVideoPlayerHelper = new VideoPlayerHelper[NUM_TARGETS];
@@ -252,64 +242,57 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mMovieName = new String[NUM_TARGETS];
 
         preferences = getSharedPreferences("RSAR_APP", Context.MODE_PRIVATE);
-        Pref_School_Fb_Name= preferences.getString("Rsar_Fd_School_Name", "");
+        Pref_School_Fb_Name = preferences.getString("Rsar_Fd_School_Name", "");
 
 
         // Create the video player helper that handles the playback of the movie
         // for the targets:
         int i;
-        for ( i = 0; i < NUM_TARGETS; i++)
-        {
-            model=myList.get(i);
+        for (i = 0; i < NUM_TARGETS; i++) {
+            model = myList.get(i);
             mVideoPlayerHelper[i] = new VideoPlayerHelper();
             mVideoPlayerHelper[i].init();
             mVideoPlayerHelper[i].setActivity(this);
 
-            Class_Name =model.getClass_Name();
-            Sub_Name =model.getSubject_Name();
-            Book_Name= model.getBook_Name();
-            DataSet_Name=model.getDataSet_Name();
+            Class_Name = model.getClass_Name();
+            Sub_Name = model.getSubject_Name();
+            Book_Name = model.getBook_Name();
+            DataSet_Name = model.getDataSet_Name();
 
-            mMovieName[i] = ".rsarapp/"+Pref_School_Fb_Name+"/"+model.getClass_Name()+"/"+model.getSubject_Name()+"/"+model.getBook_Name()
-                    +"/"+model.getZip_Name()+"/"+"videos/"+model.getVideo_Name()+".mp4";
+            mMovieName[i] = ".rsarapp/" + Pref_School_Fb_Name + "/" + model.getClass_Name() + "/" + model.getSubject_Name() + "/" + model.getBook_Name()
+                    + "/" + model.getZip_Name() + "/" + "videos/" + model.getVideo_Name() + ".mp4";
 
 
-            System.out.println("Movieeeename"+"  "+mMovieName[i]);
+            System.out.println("Movieeeename" + "  " + mMovieName[i]);
             startLoadingAnimation();
             // mMovieName[i] = ".VideoPlayback/MathsBuzz1/"+model.getVideo_Name()+".mp4";
         }
-       // System.out.println("Movieeeename"+"  "+mMovieName[i]);
+        // System.out.println("Movieeeename"+"  "+mMovieName[i]);
       /*  mMovieName[STONES] = "VideoPlayback/SampleVideo.mp4";
         mMovieName[CHIPS] = "VideoPlayback/SampleVideo.mp4";*/
 
         // Set the double tap listener:
-        mGestureDetector.setOnDoubleTapListener(new OnDoubleTapListener()
-        {
-            public boolean onDoubleTap(MotionEvent e)
-            {
-               // We do not react to this event
-               return false;
+        mGestureDetector.setOnDoubleTapListener(new OnDoubleTapListener() {
+            public boolean onDoubleTap(MotionEvent e) {
+                // We do not react to this event
+                return false;
             }
 
 
-            public boolean onDoubleTapEvent(MotionEvent e)
-            {
+            public boolean onDoubleTapEvent(MotionEvent e) {
                 // We do not react to this event
                 return false;
             }
 
 
             // Handle the single tap
-            public boolean onSingleTapConfirmed(MotionEvent e)
-            {
+            public boolean onSingleTapConfirmed(MotionEvent e) {
                 final Handler autofocusHandler = new Handler();
                 // Do not react if the StartupScreen is being displayed
-                for (int i = 0; i < NUM_TARGETS; i++)
-                {
+                for (int i = 0; i < NUM_TARGETS; i++) {
                     // Verify that the tap happened inside the target
-                    if (mRenderer!= null && mRenderer.isTapOnScreenInsideTarget(i, e.getX(),
-                        e.getY()))
-                    {
+                    if (mRenderer != null && mRenderer.isTapOnScreenInsideTarget(i, e.getX(),
+                            e.getY())) {
 
                         //------ FUllScreen remove.... just uncomment  the below code
                        /* // Check if it is playable on texture
@@ -337,13 +320,13 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
                                 // If it is playing then we pause it
                                 mVideoPlayerHelper[i].pause();
                             }
-                        } else*/ if (mVideoPlayerHelper[i].isPlayableFullscreen())
-                        {
+                        } else*/
+                        if (mVideoPlayerHelper[i].isPlayableFullscreen()) {
                             // If it isn't playable on texture
                             // Either because it wasn't requested or because it
                             // isn't supported then request playback fullscreen.
                             mVideoPlayerHelper[i].play(true,
-                                VideoPlayerHelper.CURRENT_POSITION);
+                                    VideoPlayerHelper.CURRENT_POSITION);
                         }
 
                         // Even though multiple videos can be loaded only one
@@ -351,9 +334,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
                         // prevents that, say, overlapping videos trigger
                         // simultaneously playback.
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         boolean result = CameraDevice.getInstance().setFocusMode(
                                 CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO);
                         if (!result)
@@ -361,10 +342,8 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
                         // Generates a Handler to trigger continuous auto-focus
                         // after 1 second
-                        autofocusHandler.postDelayed(new Runnable()
-                        {
-                            public void run()
-                            {
+                        autofocusHandler.postDelayed(new Runnable() {
+                            public void run() {
                                 final boolean autofocusResult = CameraDevice.getInstance().setFocusMode(
                                         CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
 
@@ -380,8 +359,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         });
     }
 
-    private void loadTextures()
-    {
+    private void loadTextures() {
 
         mTextures.add(Texture.loadTextureFromApk(
                 "VideoPlayback/play.png", getAssets()));
@@ -648,47 +626,42 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mTextures.add(Texture.loadTextureFromApk(
                 "VideoPlayback/play.png", getAssets()));
         mTextures.add(Texture.loadTextureFromApk("VideoPlayback/play.png",
-            getAssets()));
+                getAssets()));
         mTextures.add(Texture.loadTextureFromApk("VideoPlayback/busy.png",
-            getAssets()));
+                getAssets()));
         mTextures.add(Texture.loadTextureFromApk("VideoPlayback/error.png",
-            getAssets()));
+                getAssets()));
     }
 
 
     // Called when the activity will start interacting with the user.
-    protected void onResume()
-    {
+    protected void onResume() {
         Log.d(LOGTAG, "onResume");
         super.onResume();
 
         showProgressIndicator(true);
-       // vuforiaAppSession.onResume();
-        if (mIsDroidDevice)
-        {
+        // vuforiaAppSession.onResume();
+        if (mIsDroidDevice) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
         vuforiaAppSession.onResume();
         // Reload all the movies
-        if (mRenderer != null)
-        {
-            for (int i = 0; i < NUM_TARGETS; i++)
-            {
-                if (!mReturningFromFullScreen)
-                {
+        if (mRenderer != null) {
+            for (int i = 0; i < NUM_TARGETS; i++) {
+                if (!mReturningFromFullScreen) {
                     mRenderer.requestLoad(i, mMovieName[i], mSeekPosition[i],
-                        false);
-                } else
-                {
+                            false);
+                } else {
                     mRenderer.requestLoad(i, mMovieName[i], mSeekPosition[i],
-                        mWasPlaying[i]);
+                            mWasPlaying[i]);
                 }
             }
         }
         mReturningFromFullScreen = false;
     }
+
     // Called when returning from the full screen player
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
@@ -709,12 +682,14 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
             }
         }
     }
+
     public void onConfigurationChanged(Configuration config) {
         Log.d(LOGTAG, "onConfigurationChanged");
         super.onConfigurationChanged(config);
 
         vuforiaAppSession.onConfigurationChanged();
     }
+
     // Called when the system is about to start resuming a previous activity.
     protected void onPause() {
         Log.d(LOGTAG, "onPause");
@@ -726,16 +701,14 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         }
 
         // Store the playback state of the movies and unload them:
-        for (int i = 0; i < NUM_TARGETS; i++)
-        {
+        for (int i = 0; i < NUM_TARGETS; i++) {
             // If the activity is paused we need to store the position in which
             // this was currently playing:
-            if (mVideoPlayerHelper[i].isPlayableOnTexture())
-            {
+            if (mVideoPlayerHelper[i].isPlayableOnTexture()) {
                 mSeekPosition[i] = mVideoPlayerHelper[i].getCurrentPosition();
                 mWasPlaying[i] = mVideoPlayerHelper[i].getStatus() == VideoPlayerHelper.MEDIA_STATE.PLAYING;
             }
-            System.out.println("ggjjshhhh"+ mSeekPosition[i]+"  "+mWasPlaying[i]);
+            System.out.println("ggjjshhhh" + mSeekPosition[i] + "  " + mWasPlaying[i]);
             // We also need to release the resources used by the helper, though
             // we don't need to destroy it:
             if (mVideoPlayerHelper[i] != null)
@@ -745,25 +718,22 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mReturningFromFullScreen = false;
         vuforiaAppSession.pauseAR();
     }
+
     // The final call you receive before your activity is destroyed.
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         Log.d(LOGTAG, "onDestroy");
         super.onDestroy();
 
-        for (int i = 0; i < NUM_TARGETS; i++)
-        {
+        for (int i = 0; i < NUM_TARGETS; i++) {
             // If the activity is destroyed we need to release all resources:
             if (mVideoPlayerHelper[i] != null)
                 mVideoPlayerHelper[i].deinit();
             mVideoPlayerHelper[i] = null;
         }
 
-        try
-        {
+        try {
             vuforiaAppSession.stopAR();
-        } catch (SampleApplicationException e)
-        {
+        } catch (SampleApplicationException e) {
             Log.e(LOGTAG, e.getString());
         }
         mGestureDetector.setOnDoubleTapListener(null);
@@ -772,131 +742,128 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mTextures = null;
         System.gc();
     }
+
     // Pause all movies except one
     // if the value of 'except' is -1 then
     // do a blanket pause
     private void pauseAll(int except) {
         // And pause all the playing videos:
-        for (int i = 0; i < NUM_TARGETS; i++)
-        {
+        for (int i = 0; i < NUM_TARGETS; i++) {
             // We can make one exception to the pause all calls:
-            if (i != except)
-            {
+            if (i != except) {
                 // Check if the video is playable on texture
-                if (mVideoPlayerHelper[i].isPlayableOnTexture())
-                {
+                if (mVideoPlayerHelper[i].isPlayableOnTexture()) {
                     // If it is playing then we pause it
                     mVideoPlayerHelper[i].pause();
                 }
             }
         }
     }
+
     // Do not exit immediately and instead show the startup screen
     public void onBackPressed() {
         pauseAll(-1);
         super.onBackPressed();
     }
 
-
     public void startLoadingAnimation() {
         mUILayout = (RelativeLayout) View.inflate(getApplicationContext(), R.layout.camera_overlay,
-            null);
+                null);
 
-        Cam_Butt=(Button)mUILayout.findViewById(R.id.button) ;
-        Cam_Butt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialogss = new Dialog(VideoPlayback.this);
-                dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogss.setContentView(R.layout.popup_help);
-                dialogss.setCancelable(true);
-                // set the custom dialog components - text, image and button
-                LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
-                mPager = (ViewPager) dialogss.findViewById(R.id.pager);
-                mPager.setAdapter(new SlidingImageAdapter(VideoPlayback.this,imageModelArrayList));
-
-                CirclePageIndicator indicator = (CirclePageIndicator)
-                        dialogss.findViewById(R.id.indicator);
-
-                indicator.setViewPager(mPager);
-
-                final float density = getResources().getDisplayMetrics().density;
-
-//Set circle indicator radius
-                indicator.setRadius(5 * density);
-
-                NUM_PAGES =imageModelArrayList.size();
-
-                // Auto start of viewpager
-                final Handler handler = new Handler();
-                final Runnable Update = new Runnable() {
-                    public void run() {
-                        if (currentPage == NUM_PAGES) {
-                            currentPage = 0;
-                        }
-                        mPager.setCurrentItem(currentPage++, true);
-                    }
-                };
-              /*  Timer swipeTimer = new Timer();
-                swipeTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(Update);
-                    }
-                }, 5000, 5000);
-*/
-                // Pager listener over indicator
-                indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        currentPage = position;
-
-                    }
-
-                    @Override
-                    public void onPageScrolled(int pos, float arg1, int arg2) {
-
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int pos) {
-
-                    }
-                });
-
-
-
-
-                ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
-
-
-
-                dialogss.show();
-
-            }
-
-        });
+//        Cam_Butt=(Button)mUILayout.findViewById(R.id.button) ;
+//        Cam_Butt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Dialog dialogss = new Dialog(VideoPlayback.this);
+//                dialogss.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialogss.setContentView(R.layout.popup_help);
+//                dialogss.setCancelable(true);
+//                // set the custom dialog components - text, image and button
+//                LinearLayout ln_outline=(LinearLayout)dialogss.findViewById(R.id.dia_ln_outline);
+//                mPager = (ViewPager) dialogss.findViewById(R.id.pager);
+//                mPager.setAdapter(new SlidingImageAdapter(VideoPlayback.this,imageModelArrayList));
+//
+//                CirclePageIndicator indicator = (CirclePageIndicator)
+//                        dialogss.findViewById(R.id.indicator);
+//
+//                indicator.setViewPager(mPager);
+//
+//                final float density = getResources().getDisplayMetrics().density;
+//
+////Set circle indicator radius
+//                indicator.setRadius(5 * density);
+//
+//                NUM_PAGES =imageModelArrayList.size();
+//
+//                // Auto start of viewpager
+//                final Handler handler = new Handler();
+//                final Runnable Update = new Runnable() {
+//                    public void run() {
+//                        if (currentPage == NUM_PAGES) {
+//                            currentPage = 0;
+//                        }
+//                        mPager.setCurrentItem(currentPage++, true);
+//                    }
+//                };
+//              /*  Timer swipeTimer = new Timer();
+//                swipeTimer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        handler.post(Update);
+//                    }
+//                }, 5000, 5000);
+//*/
+//                // Pager listener over indicator
+//                indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//
+//                    @Override
+//                    public void onPageSelected(int position) {
+//                        currentPage = position;
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageScrolled(int pos, float arg1, int arg2) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageScrollStateChanged(int pos) {
+//
+//                    }
+//                });
+//
+//
+//
+//
+//                ln_outline.setBackgroundColor(Color.parseColor(Pref_Bg_Code));
+//
+//
+//
+//                dialogss.show();
+//
+//            }
+//
+//        });
         mUILayout.setVisibility(View.VISIBLE);
         mUILayout.setBackgroundColor(Color.BLACK);
 
         // Gets a reference to the loading dialog
         loadingDialogHandler.mLoadingDialogContainer = mUILayout
-            .findViewById(R.id.loading_indicator);
+                .findViewById(R.id.loading_indicator);
 
         // Shows the loading indicator at start
         loadingDialogHandler
-            .sendEmptyMessage(LoadingDialogHandler.SHOW_LOADING_DIALOG);
+                .sendEmptyMessage(LoadingDialogHandler.SHOW_LOADING_DIALOG);
 
         // Adds the inflated layout to the view
         addContentView(mUILayout, new LayoutParams(LayoutParams.MATCH_PARENT,
-            LayoutParams.MATCH_PARENT));
+                LayoutParams.MATCH_PARENT));
     }
 
 
     // Initializes AR application components.
-    private void initApplicationAR()
-    {
+    private void initApplicationAR() {
         // Create OpenGL ES view:
         int depthSize = 16;
         int stencilSize = 0;
@@ -905,7 +872,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mGlView = new SampleApplicationGLView(getApplicationContext());
         mGlView.init(translucent, depthSize, stencilSize);
 
-        mRenderer = new VideoPlaybackRenderer(this, vuforiaAppSession, NUM_TARGETS,  myList);
+        mRenderer = new VideoPlaybackRenderer(this, vuforiaAppSession, NUM_TARGETS, myList);
         mRenderer.setTextures(mTextures);
 
 
@@ -913,8 +880,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         // must happen when the surface has been created. This means that we
         // can't load the movie from this thread (GUI) but instead we must
         // tell the GL thread to load it once the surface has been created.
-        for (int i = 0; i < NUM_TARGETS; i++)
-        {
+        for (int i = 0; i < NUM_TARGETS; i++) {
             mRenderer.setVideoPlayerHelper(i, mVideoPlayerHelper[i]);
             mRenderer.requestLoad(i, mMovieName[i], 0, false);
         }
@@ -922,36 +888,31 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         mGlView.setRenderer(mRenderer);
         mGlView.setPreserveEGLContextOnPause(true);
 
-        for (int i = 0; i < NUM_TARGETS; i++)
-        {
-            float[] temp = { 0f, 0f, 0f };
+        for (int i = 0; i < NUM_TARGETS; i++) {
+            float[] temp = {0f, 0f, 0f};
             mRenderer.targetPositiveDimensions[i].setData(temp);
             mRenderer.videoPlaybackTextureID[i] = -1;
         }
     }
 
-
     // We do not handle the touch event here, we just forward it to the
     // gesture detector
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         return ((mSampleAppMenu != null && mSampleAppMenu.processEvent(event))
                 || mGestureDetector.onTouchEvent(event));
     }
 
 
     @Override
-    public boolean doInitTrackers()
-    {
+    public boolean doInitTrackers() {
         // Indicate if the trackers were initialized correctly
         boolean result = true;
 
         // Initialize the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
         Tracker tracker = trackerManager.initTracker(ObjectTracker
-            .getClassType());
-        if (tracker == null)
-        {
+                .getClassType());
+        if (tracker == null) {
             Log.d(LOGTAG, "Failed to initialize ObjectTracker.");
             result = false;
         }
@@ -960,12 +921,9 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         DeviceTracker deviceTracker = (PositionalDeviceTracker)
                 trackerManager.initTracker(PositionalDeviceTracker.getClassType());
 
-        if (deviceTracker != null)
-        {
+        if (deviceTracker != null) {
             Log.i(LOGTAG, "Successfully initialized Device Tracker");
-        }
-        else
-        {
+        } else {
             Log.e(LOGTAG, "Failed to initialize Device Tracker");
         }
 
@@ -974,62 +932,54 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public boolean doLoadTrackersData()
-    {
+    public boolean doLoadTrackersData() {
         // Get the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
         ObjectTracker objectTracker = (ObjectTracker) trackerManager
-            .getTracker(ObjectTracker.getClassType());
-        if (objectTracker == null)
-        {
+                .getTracker(ObjectTracker.getClassType());
+        if (objectTracker == null) {
             Log.d(
-                LOGTAG,
-                "Failed to load tracking data set because the ObjectTracker has not been initialized.");
+                    LOGTAG,
+                    "Failed to load tracking data set because the ObjectTracker has not been initialized.");
             return false;
         }
 
-        if (dataSetStonesAndChips == null)
-        {
+        if (dataSetStonesAndChips == null) {
             dataSetStonesAndChips = objectTracker.createDataSet();
         }
         // Create the data sets:
-       // dataSetStonesAndChips = objectTracker.createDataSet();
-        if (dataSetStonesAndChips == null)
-        {
+        // dataSetStonesAndChips = objectTracker.createDataSet();
+        if (dataSetStonesAndChips == null) {
             Log.d(LOGTAG, "Failed to create a new tracking data.");
             return false;
         }
-        File dir,file;
+        File dir, file;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-            file = new File(dir, "/.rsarapp/"+Pref_School_Fb_Name+"/"+Class_Name+"/"+Sub_Name+"/"+Book_Name+"/"+"DataSet"+"/"+DataSet_Name+"/"+DataSet_Name+".xml" );
-        }else {
+            file = new File(dir, "/.rsarapp/" + Pref_School_Fb_Name + "/" + Class_Name + "/" + Sub_Name + "/" + Book_Name + "/" + "DataSet" + "/" + DataSet_Name + "/" + DataSet_Name + ".xml");
+        } else {
             dir = Environment.getExternalStorageDirectory();
             file = new File(dir, "/.rsarapp/" + Pref_School_Fb_Name + "/" + Class_Name + "/" + Sub_Name + "/" + Book_Name + "/" + "DataSet" + "/" + DataSet_Name + "/" + DataSet_Name + ".xml");
         }
-        System.out.println("fileDDABANG"+"  "+file);
+        System.out.println("fileDDABANG" + "  " + file);
         if (!dataSetStonesAndChips.load(String.valueOf(file),
-                STORAGE_TYPE.STORAGE_ABSOLUTE))
-
-       {
+                STORAGE_TYPE.STORAGE_ABSOLUTE)) {
             Log.d(LOGTAG, "Failed to load data set.");
             return false;
         }
 
         // Activate the data set:
-        if (!objectTracker.activateDataSet(dataSetStonesAndChips))
-        {
+        if (!objectTracker.activateDataSet(dataSetStonesAndChips)) {
             Log.d(LOGTAG, "Failed to activate data set.");
             return false;
         }
 
         TrackableList trackableList = dataSetStonesAndChips.getTrackables();
-        for (Trackable trackable : trackableList)
-        {
+        for (Trackable trackable : trackableList) {
             String name = "Current Dataset : " + trackable.getName();
             trackable.setUserData(name);
 
-            System.out.println("DDABANG"+"  "+name);
+            System.out.println("DDABANG" + "  " + name);
             Log.d(LOGTAG, "UserData:Set the following user data "
                     + trackable.getUserData());
         }
@@ -1037,37 +987,31 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         Log.d(LOGTAG, "Successfully loaded and activated data set.");
         return true;
     }
-    boolean isDeviceTrackingActive()
-    {
+
+    boolean isDeviceTrackingActive() {
         return mDeviceTracker;
     }
 
     @Override
-    public boolean doStartTrackers()
-    {
+    public boolean doStartTrackers() {
         // Indicate if the trackers were started correctly
         boolean result = true;
         TrackerManager trackerManager = TrackerManager.getInstance();
         Tracker objectTracker = trackerManager.getInstance().getTracker(
-            ObjectTracker.getClassType());
-        if (objectTracker != null && objectTracker.start())
-        {
+                ObjectTracker.getClassType());
+        if (objectTracker != null && objectTracker.start()) {
             objectTracker.start();
-          //  Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 2);
+            //  Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 2);
         } else
             result = false;
 
-        if (isDeviceTrackingActive())
-        {
+        if (isDeviceTrackingActive()) {
             PositionalDeviceTracker deviceTracker = (PositionalDeviceTracker) trackerManager
                     .getTracker(PositionalDeviceTracker.getClassType());
 
-            if (deviceTracker != null && deviceTracker.start())
-            {
+            if (deviceTracker != null && deviceTracker.start()) {
                 Log.i(LOGTAG, "Successfully started Device Tracker");
-            }
-            else
-            {
+            } else {
                 Log.e(LOGTAG, "Failed to start Device Tracker");
             }
         }
@@ -1078,24 +1022,23 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public boolean doStopTrackers()
-    {
+    public boolean doStopTrackers() {
         // Indicate if the trackers were stopped correctly
         boolean result = true;
 
         TrackerManager trackerManager = TrackerManager.getInstance();
         Tracker objectTracker = trackerManager.getInstance().getTracker(
-            ObjectTracker.getClassType());
+                ObjectTracker.getClassType());
 
 
         if (objectTracker != null)
             objectTracker.stop();
         else
             result = false;
-        System.out.println("gigaabyte"+" "+objectTracker.getType());
+        System.out.println("gigaabyte" + " " + objectTracker.getType());
 
         // Stop the device tracker
-        if(isDeviceTrackingActive()) {
+        if (isDeviceTrackingActive()) {
 
             Tracker deviceTracker = trackerManager.getTracker(PositionalDeviceTracker.getClassType());
 
@@ -1113,36 +1056,31 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public boolean doUnloadTrackersData()
-    {
+    public boolean doUnloadTrackersData() {
         // Indicate if the trackers were unloaded correctly
         boolean result = true;
 
         // Get the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
         ObjectTracker objectTracker = (ObjectTracker) trackerManager
-            .getTracker(ObjectTracker.getClassType());
-        if (objectTracker == null)
-        {
+                .getTracker(ObjectTracker.getClassType());
+        if (objectTracker == null) {
             Log.d(
-                LOGTAG,
-                "Failed to destroy the tracking data set because the ObjectTracker has not been initialized.");
+                    LOGTAG,
+                    "Failed to destroy the tracking data set because the ObjectTracker has not been initialized.");
             return false;
         }
 
-        if (dataSetStonesAndChips != null)
-        {
+        if (dataSetStonesAndChips != null) {
             if (objectTracker.getActiveDataSets().at(0) == dataSetStonesAndChips
-                && !objectTracker.deactivateDataSet(dataSetStonesAndChips))
-            {
+                    && !objectTracker.deactivateDataSet(dataSetStonesAndChips)) {
                 Log.d(
-                    LOGTAG,
-                    "Failed to destroy the tracking data set StonesAndChips because the data set could not be deactivated.");
+                        LOGTAG,
+                        "Failed to destroy the tracking data set StonesAndChips because the data set could not be deactivated.");
                 result = false;
-            } else if (!objectTracker.destroyDataSet(dataSetStonesAndChips))
-            {
+            } else if (!objectTracker.destroyDataSet(dataSetStonesAndChips)) {
                 Log.d(LOGTAG,
-                    "Failed to destroy the tracking data set StonesAndChips.");
+                        "Failed to destroy the tracking data set StonesAndChips.");
                 result = false;
             }
 
@@ -1154,8 +1092,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public boolean doDeinitTrackers()
-    {
+    public boolean doDeinitTrackers() {
         // Deinit the image tracker:
         TrackerManager trackerManager = TrackerManager.getInstance();
         boolean result = trackerManager.deinitTracker(ObjectTracker.getClassType());
@@ -1166,11 +1103,9 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public void onInitARDone(SampleApplicationException exception)
-    {
+    public void onInitARDone(SampleApplicationException exception) {
 
-        if (exception == null)
-        {
+        if (exception == null) {
             initApplicationAR();
 
             mRenderer.setActive(true);
@@ -1180,29 +1115,26 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
             // BEFORE the camera is started and video
             // background is configured.
             addContentView(mGlView, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT));
+                    LayoutParams.MATCH_PARENT));
 
             // Sets the UILayout to be drawn in front of the camera
             mUILayout.bringToFront();
 
             // Hides the Loading Dialog
             //loadingDialogHandler
-           //     .sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
+            //     .sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
 
             // Sets the layout background to transparent
             mUILayout.setBackgroundColor(Color.TRANSPARENT);
 
 
-
             mSampleAppMenu = new SampleAppMenu(this, this, "Video Playback",
-                mGlView, mUILayout, null);
+                    mGlView, mUILayout, null);
             setSampleAppMenuSettings();
             mIsInitialized = true;
 
             vuforiaAppSession.startAR();
-        }
-        else
-        {
+        } else {
             Log.e(LOGTAG, exception.getString());
             showInitializationErrorMessage(exception.getString());
         }
@@ -1210,28 +1142,22 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     }
 
 
-
     @Override
-    public void onVuforiaResumed()
-    {
-        if (mGlView != null)
-        {
+    public void onVuforiaResumed() {
+        if (mGlView != null) {
             mGlView.setVisibility(View.VISIBLE);
             mGlView.onResume();
         }
     }
 
     @Override
-    public void onVuforiaStarted()
-    {
+    public void onVuforiaStarted() {
         mRenderer.updateRenderingPrimitives();
 
         // Set camera focus mode
-        if(!CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO))
-        {
+        if (!CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO)) {
             // If continuous autofocus mode fails, attempt to set to a different mode
-            if(!CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO))
-            {
+            if (!CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO)) {
                 CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_NORMAL);
             }
         }
@@ -1240,15 +1166,11 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     }
 
 
-    private void showProgressIndicator(boolean show)
-    {
-        if (show)
-        {
+    private void showProgressIndicator(boolean show) {
+        if (show) {
             loadingDialogHandler
                     .sendEmptyMessage(LoadingDialogHandler.SHOW_LOADING_DIALOG);
-        }
-        else
-        {
+        } else {
             loadingDialogHandler
                     .sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
         }
@@ -1256,34 +1178,28 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     // Shows initialization error messages as System dialogs
-    private void showInitializationErrorMessage(String message)
-    {
+    private void showInitializationErrorMessage(String message) {
         final String errorMessage = message;
-        runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                if (mErrorDialog != null)
-                {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (mErrorDialog != null) {
                     mErrorDialog.dismiss();
                 }
 
                 // Generates an Alert Dialog to show the error message
                 AlertDialog.Builder builder = new AlertDialog.Builder(
-                    VideoPlayback.this);
+                        VideoPlayback.this);
                 builder
-                    .setMessage(errorMessage)
-                    .setTitle(getString(R.string.INIT_ERROR))
-                    .setCancelable(false)
-                    .setIcon(0)
-                    .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                finish();
-                            }
-                        });
+                        .setMessage(errorMessage)
+                        .setTitle(getString(R.string.INIT_ERROR))
+                        .setCancelable(false)
+                        .setIcon(0)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        finish();
+                                    }
+                                });
 
                 mErrorDialog = builder.create();
                 mErrorDialog.show();
@@ -1293,17 +1209,14 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public void onVuforiaUpdate(State state)
-    {
-        if (mSwitchDatasetAsap)
-        {
+    public void onVuforiaUpdate(State state) {
+        if (mSwitchDatasetAsap) {
             mSwitchDatasetAsap = false;
             TrackerManager tm = TrackerManager.getInstance();
             ObjectTracker ot = (ObjectTracker) tm.getTracker(ObjectTracker
                     .getClassType());
             if (ot == null || mCurrentDataset == null
-                    || ot.getActiveDataSets().at(0) == null)
-            {
+                    || ot.getActiveDataSets().at(0) == null) {
                 Log.d(LOGTAG, "Failed to swap datasets");
                 return;
             }
@@ -1322,8 +1235,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
     private final static int CMD_DATASET_START_INDEX = 5;
 
     // This method sets the menu's settings
-    private void setSampleAppMenuSettings()
-    {
+    private void setSampleAppMenuSettings() {
         SampleAppMenuGroup group;
 
         group = mSampleAppMenu.addGroup("", false);
@@ -1331,7 +1243,7 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
         group = mSampleAppMenu.addGroup("", true);
         group.addSelectionItem(getString(R.string.menu_playFullscreenVideo),
-            CMD_FULLSCREEN_VIDEO, mPlayFullscreenVideo);
+                CMD_FULLSCREEN_VIDEO, mPlayFullscreenVideo);
 
         group = mSampleAppMenu.addGroup("", true);
         group.addSelectionItem(getString(R.string.menu_extended_tracking),
@@ -1342,13 +1254,11 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
 
 
     @Override
-    public boolean menuProcess(int command)
-    {
+    public boolean menuProcess(int command) {
 
         boolean result = true;
 
-        switch (command)
-        {
+        switch (command) {
             case CMD_BACK:
                 finish();
                 break;
@@ -1356,26 +1266,22 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
             case CMD_FULLSCREEN_VIDEO:
                 mPlayFullscreenVideo = !mPlayFullscreenVideo;
 
-                for(int i = 0; i < mVideoPlayerHelper.length; i++)
-                {
-                    if (mVideoPlayerHelper[i].getStatus() == VideoPlayerHelper.MEDIA_STATE.PLAYING)
-                    {
+                for (int i = 0; i < mVideoPlayerHelper.length; i++) {
+                    if (mVideoPlayerHelper[i].getStatus() == VideoPlayerHelper.MEDIA_STATE.PLAYING) {
                         // If it is playing then we pause it
                         mVideoPlayerHelper[i].pause();
 
                         mVideoPlayerHelper[i].play(true,
-                            mSeekPosition[i]);
+                                mSeekPosition[i]);
                     }
                 }
                 break;
 
-             case CMD_DEVICE_TRACKING:
+            case CMD_DEVICE_TRACKING:
                 result = toggleDeviceTracker();
 
                 break;
             default:
-
-
 
 
                 result = false;
@@ -1385,60 +1291,44 @@ public class VideoPlayback extends Activity implements SampleApplicationControl,
         return result;
     }
 
-    private boolean toggleDeviceTracker()
-    {
+    private boolean toggleDeviceTracker() {
         boolean result = true;
         TrackerManager trackerManager = TrackerManager.getInstance();
         PositionalDeviceTracker deviceTracker = (PositionalDeviceTracker)
                 trackerManager.getTracker(PositionalDeviceTracker.getClassType());
 
-        if (deviceTracker != null)
-        {
-            if (!mDeviceTracker)
-            {
-                if (!deviceTracker.start())
-                {
-                    Log.e(LOGTAG,"Failed to start device tracker");
+        if (deviceTracker != null) {
+            if (!mDeviceTracker) {
+                if (!deviceTracker.start()) {
+                    Log.e(LOGTAG, "Failed to start device tracker");
                     result = false;
+                } else {
+                    Log.d(LOGTAG, "Successfully started device tracker");
                 }
-                else
-                {
-                    Log.d(LOGTAG,"Successfully started device tracker");
-                }
-            }
-            else
-            {
+            } else {
                 deviceTracker.stop();
                 Log.d(LOGTAG, "Successfully stopped device tracker");
 
                 clearSampleAppMessage();
             }
-        }
-        else
-        {
+        } else {
             Log.e(LOGTAG, "Device tracker is null!");
             result = false;
         }
 
-        if (result)
-        {
+        if (result) {
             mDeviceTracker = !mDeviceTracker;
-        }
-        else
-        {
+        } else {
             clearSampleAppMessage();
         }
 
         return result;
     }
 
-    private void clearSampleAppMessage()
-    {
-        runOnUiThread(new Runnable()
-        {
+    private void clearSampleAppMessage() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
 
             }
         });
