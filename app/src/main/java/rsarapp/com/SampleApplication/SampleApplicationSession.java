@@ -145,8 +145,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             mSessionControlRef.get().onInitARDone(vuforiaException);
         }
     }
-
-
     // Sets the fusion provider type for DeviceTracker optimization
     // This setting only affects the Tracker if the DeviceTracker is used.
     // By default, the provider type is set to FUSION_OPTIMIZE_MODEL_TARGETS_AND_SMART_TERRAIN
@@ -163,13 +161,10 @@ public class SampleApplicationSession implements UpdateCallbackInterface
                 return false;
             }
         }
-
         Log.d(LOGTAG, "Successfully set fusion provider type: " + providerType);
-
         return true;
     }
-    
-    
+
     // Starts Vuforia Engine, initialize and starts the camera and start the trackers
     private void startCameraAndTrackers() throws SampleApplicationException
     {
@@ -178,32 +173,28 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         {
         	error = "Camera already running, unable to open again";
         	Log.e(LOGTAG, error);
-            throw new SampleApplicationException(
-                SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
+            throw new SampleApplicationException(SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
         }
         
         if (!CameraDevice.getInstance().init())
         {
             error = "Unable to open camera device" ;
             Log.e(LOGTAG, error);
-            throw new SampleApplicationException(
-                SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
+            throw new SampleApplicationException(SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
         }
                
         if (!CameraDevice.getInstance().selectVideoMode(mVideoMode))
         {
             error = "Unable to set video mode";
             Log.e(LOGTAG, error);
-            throw new SampleApplicationException(
-                SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
+            throw new SampleApplicationException(SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
         }
         
         if (!CameraDevice.getInstance().start())
         {
             error = "Unable to start camera device";
             Log.e(LOGTAG, error);
-            throw new SampleApplicationException(
-                SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
+            throw new SampleApplicationException(SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, error);
         }
         
         mSessionControlRef.get().doStartTrackers();
@@ -216,7 +207,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
                 CameraDevice.getInstance().setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_NORMAL);
         }
     }
-
 
     public void startAR()
     {
@@ -232,10 +222,8 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             Log.e(LOGTAG, logMessage);
 
             vuforiaException = new SampleApplicationException(
-                    SampleApplicationException.CAMERA_INITIALIZATION_FAILURE,
-                    logMessage);
+                    SampleApplicationException.CAMERA_INITIALIZATION_FAILURE, logMessage);
         }
-
         if (vuforiaException != null)
         {
             // Send exception to the application and call initDone
@@ -243,21 +231,18 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             mSessionControlRef.get().onInitARDone(vuforiaException);
         }
     }
-    
-    
+
     // Stops any ongoing initialization, stops Vuforia Engine
     public void stopAR() throws SampleApplicationException
     {
         // Cancel potentially running tasks
-        if (mInitVuforiaTask != null
-            && mInitVuforiaTask.getStatus() != InitVuforiaTask.Status.FINISHED)
+        if (mInitVuforiaTask != null && mInitVuforiaTask.getStatus() != InitVuforiaTask.Status.FINISHED)
         {
             mInitVuforiaTask.cancel(true);
             mInitVuforiaTask = null;
         }
         
-        if (mLoadTrackerTask != null
-            && mLoadTrackerTask.getStatus() != LoadTrackerTask.Status.FINISHED)
+        if (mLoadTrackerTask != null && mLoadTrackerTask.getStatus() != LoadTrackerTask.Status.FINISHED)
         {
             mLoadTrackerTask.cancel(true);
             mLoadTrackerTask = null;
@@ -265,7 +250,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         
         mInitVuforiaTask = null;
         mLoadTrackerTask = null;
-        
         mStarted = false;
         
         stopCamera();
@@ -289,18 +273,14 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             
             if (!unloadTrackersResult)
                 throw new SampleApplicationException(
-                    SampleApplicationException.UNLOADING_TRACKERS_FAILURE,
-                    "Failed to unload trackers\' data");
+                    SampleApplicationException.UNLOADING_TRACKERS_FAILURE, "Failed to unload trackers\' data");
             
             if (!deinitTrackersResult)
                 throw new SampleApplicationException(
-                    SampleApplicationException.TRACKERS_DEINITIALIZATION_FAILURE,
-                    "Failed to deinitialize trackers");
-            
+                    SampleApplicationException.TRACKERS_DEINITIALIZATION_FAILURE, "Failed to deinitialize trackers");
         }
     }
-    
-    
+
     // Pauses Vuforia Engine and stops the camera
     public void pauseAR()
     {
@@ -311,7 +291,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         
         Vuforia.onPause();
     }
-
 
     void onSurfaceChanged(int width, int height)
     {
@@ -330,7 +309,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         mSessionControlRef.get().onVuforiaUpdate(s);
     }
     
-    
     // Manages the configuration changes
     public void onConfigurationChanged()
     {
@@ -339,7 +317,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             Device.getInstance().setConfigurationChanged();
         }
     }
-    
     
     // Methods to be called to handle lifecycle
     public void onResume()
@@ -374,7 +351,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         }
     }
 
-    
     // An async task to initialize Vuforia Engine asynchronously.
     private static class InitVuforiaTask extends AsyncTask<Void, Integer, Boolean>
     {
@@ -545,7 +521,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         {
             synchronized (appSessionRef.get().mLifecycleLock)
             {
-                // Load the tracker data set:
                 return appSessionRef.get().mSessionControlRef.get().doInitTrackers();
             }
         }
@@ -555,8 +530,7 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             SampleApplicationException vuforiaException = null;
             SampleApplicationSession session = appSessionRef.get();
 
-            Log.d(LOGTAG, "InitTrackerTask.onPostExecute: execution "
-                    + (result ? "successful" : "failed"));
+            Log.d(LOGTAG, "InitTrackerTask.onPostExecute: execution " + (result ? "successful" : "failed"));
 
             if (result)
             {
@@ -570,8 +544,7 @@ public class SampleApplicationSession implements UpdateCallbackInterface
                     Log.e(LOGTAG, logMessage);
 
                     vuforiaException = new SampleApplicationException(
-                            SampleApplicationException.TRACKERS_INITIALIZATION_FAILURE,
-                            logMessage);
+                            SampleApplicationException.TRACKERS_INITIALIZATION_FAILURE, logMessage);
                 }
             }
             else
@@ -603,51 +576,28 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         {
             appSessionRef = new WeakReference<>(session);
         }
-
         protected Boolean doInBackground(Void... params)
         {
-            // Prevent the onDestroy() method to overlap:
             synchronized (appSessionRef.get().mLifecycleLock)
             {
-                // Load the tracker data set:
                 return appSessionRef.get().mSessionControlRef.get().doLoadTrackersData();
             }
         }
-        
-        
+
         protected void onPostExecute(Boolean result)
         {
-            
             SampleApplicationException vuforiaException = null;
             SampleApplicationSession session = appSessionRef.get();
-            
-            Log.d(LOGTAG, "LoadTrackerTask.onPostExecute: execution "
-                + (result ? "successful" : "failed"));
-            
             if (!result)
             {
                 String logMessage = "Failed to load tracker data.";
-                // Error loading dataset
-                Log.e(LOGTAG, logMessage);
-                vuforiaException = new SampleApplicationException(
-                    SampleApplicationException.LOADING_TRACKERS_FAILURE,
-                    logMessage);
+                vuforiaException = new SampleApplicationException(SampleApplicationException.LOADING_TRACKERS_FAILURE, logMessage);
             } else
             {
-                // Hint to the virtual machine that it would be a good time to
-                // run the garbage collector:
-                //
-                // NOTE: This is only a hint. There is no guarantee that the
-                // garbage collector will actually be run.
                 System.gc();
-                
                 Vuforia.registerCallback(session);
-                
                 session.mStarted = true;
             }
-            
-            // Done loading the tracker, update application status, send the
-            // exception to check errors
             session.mSessionControlRef.get().onInitARDone(vuforiaException);
         }
     }
@@ -680,28 +630,21 @@ public class SampleApplicationSession implements UpdateCallbackInterface
                     vuforiaException = e;
                 }
             }
-
             return true;
         }
 
         protected void onPostExecute(Boolean result)
         {
-            Log.d(LOGTAG, "StartVuforiaTask.onPostExecute: execution "
-                    + (result ? "successful" : "failed"));
-
             SampleApplicationControl sessionControl = appSessionRef.get().mSessionControlRef.get();
             sessionControl.onVuforiaStarted();
 
             if (vuforiaException != null)
             {
-                // Send exception to the application and call initDone
-                // to stop initialization process
                 sessionControl.onInitARDone(vuforiaException);
             }
         }
     }
-    
-    
+
     // Returns the error message for each error code
     private String getInitializationErrorString(int code)
     {
@@ -727,9 +670,7 @@ public class SampleApplicationSession implements UpdateCallbackInterface
         }
     }
     
-    
-    private void stopCamera()
-    {
+    private void stopCamera() {
         if (mCameraRunning)
         {
             mSessionControlRef.get().doStopTrackers();
@@ -738,7 +679,6 @@ public class SampleApplicationSession implements UpdateCallbackInterface
             CameraDevice.getInstance().deinit();
         }
     }
-
 
     public int getVideoMode()
     {

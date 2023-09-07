@@ -59,8 +59,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }else
                 {
-                    AllStaticMethod.showAlertDialog(context, "No Internet Connection",
-                            "You don't have internet connection.", false);
+                    AllStaticMethod.showAlertDialog(context, "No Internet Connection", "You don't have internet connection.", false);
                 }
             }
 
@@ -76,7 +75,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         DeviceDetailModel deviceDetailModel= new DeviceDetailModel(Device_Id,Mob_Id,Mob_Product,Mob_Brand,Mob_Manufacture,Mob_Model);
         MySharedPreferences.saveUserDeviceDetailToSharedPreferences(context,deviceDetailModel);
-
     }
     @Override
     public void onBackPressed() {

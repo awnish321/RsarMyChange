@@ -41,6 +41,8 @@
     <string name="email">Email</string>
     <string name="email_now">Email now</string>
     <string name="toll_free">Toll-free</string>
-    <string name="address">Rachna Sagar Pvt. Ltd. 4583/15, Daryaganj, New Delhi, 110002 (INDIA)</string>
+        <string name="address">Rachna Sagar Pvt. Ltd. 4583/15, Daryaganj, New Delhi, 110002 (INDIA)</string>
+    <string name="permission_required_dialog_read_camera">permission_required_dialog_read_camera</string>
+    <string name="permission_required_dialog_storage">permission_required_dialog_storage</string>
 
 </resources>

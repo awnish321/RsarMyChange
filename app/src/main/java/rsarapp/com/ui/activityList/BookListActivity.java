@@ -387,7 +387,7 @@ public class BookListActivity extends AppCompatActivity implements NavigationVie
             TextView txt = (TextView) progressHUD.findViewById(R.id.message);
             txt.setText(message);
         }
-        progressHUD.setCancelable(true);
+        progressHUD.setCancelable(false);
         progressHUD.getWindow().getAttributes().gravity = Gravity.CENTER;
         WindowManager.LayoutParams lp = progressHUD.getWindow().getAttributes();
         lp.dimAmount = 0.2f;

@@ -95,12 +95,10 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
     private ArrayList<BannerModel.BannerDatum> bannerDatumArrayList;
     private BannerModel.BannerDatum bannerDatum;
     JSONArray Banner_Data;
-
     private AppUpdateManager mAppUpdateManager;
     private int inAppUpdateType;
     private Task<AppUpdateInfo> appUpdateInfoTask;
     private InstallStateUpdatedListener installStateUpdatedListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,30 +178,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
             AllStaticMethod.showAlertDialog(context, "No Internet Connection",
                     "You don't have internet connection.", false);
         }
-
-//        binding.dashboardToolbar.imgLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AllStaticMethod.logout(context);
-//                Intent intent = new Intent(context, LoginPageActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.fade_inn, R.anim.fade_outt);
-//                finishAffinity();
-//            }
-//        });
-
-//        binding.dashboardToolbar.imgShare.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//                shareIntent.setType("text/plain");
-//                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "RSAR APP");
-//                shareIntent.putExtra(Intent.EXTRA_TEXT, "Download this Application now:- https://play.google.com/store/apps/details?id=rsarapp.com.rsarapp");
-//                startActivity(Intent.createChooser(shareIntent, "share via"));
-//            }
-//        });
         binding.dashboardToolbar.imgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,7 +238,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         }
 
     }
-
     private void callClassUrl() {
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -385,7 +358,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
-
     private void callSubjectURl(String userClassId) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -512,13 +484,11 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         };
         queue.add(postRequest);
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -561,7 +531,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
 
         return true;
     }
-
     private void callProgressBar() {
         String message = "Please Wait....";
         progressHUD = new ProgressHUD(context, R.style.ProgressHUD);
@@ -580,7 +549,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         progressHUD.getWindow().setAttributes(lp);
         progressHUD.show();
     }
-
     private void callHelpBannerApi()  {
         // TODO Auto-generated method stub
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -670,7 +638,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         queue.add(postRequest);
 
     }
-
     private void inAppUpdate() {
 
         try {
@@ -705,7 +672,6 @@ public class DashBoardActivity extends AppCompatActivity implements NavigationVi
         }
 
     }
-
     private void popupSnackBarForCompleteUpdate() {
         try {
             Snackbar snackbar =
